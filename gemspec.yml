@@ -1,0 +1,19 @@
+name: fake_io
+summary: Fake IO module
+description: A mixin module for creating fake IO-like classes.
+license: MIT
+authors: Postmodern
+email: postmodern.mod3@gmail.com
+homepage: https://github.com/postmodern/fake_io.rb#readme
+has_yard: true
+
+metadata:
+  documentation_uri: https://rubydoc.info/gems/fake_io
+  source_code_uri:   https://github.com/postmodern/fake_io.rb
+  bug_tracker_uri:   https://github.com/postmodern/fake_io.rb/issues
+  changelog_uri:     https://github.com/postmodern/fake_io.rb/blob/master/ChangeLog.md
+
+required_ruby_version: ">= 1.8.7"
+
+development_dependencies:
+  bundler: ~> 2.0
