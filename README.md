@@ -20,7 +20,7 @@
 
 ## Requirements
 
-* [Ruby] >= 1.8.7
+* [Ruby] >= 1.9.1
 
 [Ruby]: https://www.ruby-lang.org/
 
