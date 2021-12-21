@@ -3,8 +3,8 @@
 # resources, that is still compatible with the standard
 # [IO](http://rubydoc.info/docs/ruby-core/1.9.2/IO) class.
 #
-# To utilize the {FakeIO} class, simply extend it and define either
-# {#io_read} and/or {#io_write}, to handle the reading and writting
+# To utilize the {FakeIO} module, simply include it into a class and define
+# either {#io_read} and/or {#io_write}, to handle the reading and writting
 # of data.
 #
 # The {#io_open} method handles optionally opening and assigning the
