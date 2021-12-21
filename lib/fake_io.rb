@@ -154,101 +154,66 @@ module FakeIO
     read(length,buffer)
   end
 
-  if RUBY_VERSION > '1.9.'
-    #
-    # Reads a byte from the IO stream.
-    #
-    # @return [Integer]
-    #   A byte from the IO stream.
-    #
-    # @note
-    #   Only available on Ruby > 1.9.
-    #
-    def getbyte
-      if (c = read(1))
-        c.bytes.first
-      end
+  #
+  # Reads a byte from the IO stream.
+  #
+  # @return [Integer]
+  #   A byte from the IO stream.
+  #
+  # @note
+  #   Only available on Ruby > 1.9.
+  #
+  def getbyte
+    if (c = read(1))
+      c.bytes.first
     end
   end
 
-  if RUBY_VERSION < '1.9.'
-    #
-    # Reads a character from the IO stream.
-    #
-    # @return [Integer]
-    #   A character from the IO stream.
-    #
-    def getc
-      if (c = read(1))
-        c[0]
-      end
-    end
-  else
-    #
-    # Reads a character from the IO stream.
-    #
-    # @return [String]
-    #   A character from the IO stream.
-    #
-    def getc
-      read(1)
-    end
+  #
+  # Reads a character from the IO stream.
+  #
+  # @return [String]
+  #   A character from the IO stream.
+  #
+  def getc
+    read(1)
   end
 
-  if RUBY_VERSION > '1.9.'
-    #
-    # Un-reads a byte from the IO stream, append it to the read buffer.
-    #
-    # @param [Integer, String] byte
-    #   The byte to un-read.
-    #
-    # @return [nil]
-    #   The byte was appended to the read buffer.
-    #
-    # @note
-    #   Only available on Ruby > 1.9.
-    #
-    def ungetbyte(byte)
-      byte = case byte
-             when Integer then byte.chr
-             else              byte.to_s
-             end
+  #
+  # Un-reads a byte from the IO stream, append it to the read buffer.
+  #
+  # @param [Integer, String] byte
+  #   The byte to un-read.
+  #
+  # @return [nil]
+  #   The byte was appended to the read buffer.
+  #
+  # @note
+  #   Only available on Ruby > 1.9.
+  #
+  def ungetbyte(byte)
+    byte = case byte
+           when Integer then byte.chr
+           else              byte.to_s
+           end
 
-      prepend_buffer(byte)
-      return nil
-    end
+    prepend_buffer(byte)
+    return nil
   end
 
-  if RUBY_VERSION < '1.9.'
-    #
-    # Un-reads a character from the IO stream, append it to the
-    # read buffer.
-    #
-    # @param [Integer] char
-    #   The character to un-read.
-    #
-    # @return [nil]
-    #   The character was appended to the read buffer.
-    #
-    def ungetc(char)
-      prepend_buffer(char.chr)
-      return nil
-    end
-  else
-    #
-    # Un-reads a character from the IO stream, append it to the
-    # read buffer.
-    #
-    # @param [#to_s] char
-    #   The character to un-read.
-    #
-    # @return [nil]
-    #   The character was appended to the read buffer.
-    #
-    def ungetc(char)
-      prepend_buffer(char.to_s)
-      return nil
-    end
+  #
+  # Un-reads a character from the IO stream, append it to the
+  # read buffer.
+  #
+  # @param [#to_s] char
+  #   The character to un-read.
+  #
+  # @return [nil]
+  #   The character was appended to the read buffer.
+  #
+  def ungetc(char)
+    prepend_buffer(char.to_s)
+    return nil
   end
 
   #
@@ -383,30 +348,28 @@ module FakeIO
 
   alias chars each_char
 
-  if RUBY_VERSION > '1.9.'
-    #
-    # Passes the Integer ordinal of each character in the stream.
-    #
-    # @yield [ord]
-    #   The given block will be passed each codepoint.
-    #
-    # @yieldparam [String] ord
-    #   The ordinal of a character from the stream.
-    #
-    # @return [Enumerator]
-    #   If no block is given an Enumerator object will be returned.
-    #
-    # @note
-    #   Only available on Ruby > 1.9.
-    #
-    def each_codepoint
-      return enum_for(__method__) unless block_given?
+  #
+  # Passes the Integer ordinal of each character in the stream.
+  #
+  # @yield [ord]
+  #   The given block will be passed each codepoint.
+  #
+  # @yieldparam [String] ord
+  #   The ordinal of a character from the stream.
+  #
+  # @return [Enumerator]
+  #   If no block is given an Enumerator object will be returned.
+  #
+  # @note
+  #   Only available on Ruby > 1.9.
+  #
+  def each_codepoint
+    return enum_for(__method__) unless block_given?
 
-      each_char { |c| yield c.ord }
-    end
-
-    alias codepoints each_codepoint
+    each_char { |c| yield c.ord }
   end
+
+  alias codepoints each_codepoint
 
   #
   # Iterates over each line in the IO stream.
@@ -679,50 +642,48 @@ module FakeIO
     @binmode == true
   end
 
-  if RUBY_VERSION > '1.9.'
-    #
-    # @return [IO]
-    #
-    # @note
-    #   For compatibility with
-    #   [IO](http://rubydoc.info/docs/ruby-core/1.9.2/IO).
-    #
-    def autoclose=(mode)
-      self
-    end
+  #
+  # @return [IO]
+  #
+  # @note
+  #   For compatibility with
+  #   [IO](http://rubydoc.info/docs/ruby-core/1.9.2/IO).
+  #
+  def autoclose=(mode)
+    self
+  end
 
-    #
-    # @return [true]
-    #
-    # @note
-    #   For compatibility with
-    #   [IO](http://rubydoc.info/docs/ruby-core/1.9.2/IO).
-    #
-    def autoclose?
-      true
-    end
+  #
+  # @return [true]
+  #
+  # @note
+  #   For compatibility with
+  #   [IO](http://rubydoc.info/docs/ruby-core/1.9.2/IO).
+  #
+  def autoclose?
+    true
+  end
 
-    #
-    # @return [IO]
-    #
-    # @note
-    #   For compatibility with
-    #   [IO](http://rubydoc.info/docs/ruby-core/1.9.2/IO).
-    #
-    def close_on_exec=(mode)
-      self
-    end
+  #
+  # @return [IO]
+  #
+  # @note
+  #   For compatibility with
+  #   [IO](http://rubydoc.info/docs/ruby-core/1.9.2/IO).
+  #
+  def close_on_exec=(mode)
+    self
+  end
 
-    #
-    # @return [true]
-    #
-    # @note
-    #   For compatibility with
-    #   [IO](http://rubydoc.info/docs/ruby-core/1.9.2/IO).
-    #
-    def close_on_exec?
-      true
-    end
+  #
+  # @return [true]
+  #
+  # @note
+  #   For compatibility with
+  #   [IO](http://rubydoc.info/docs/ruby-core/1.9.2/IO).
+  #
+  def close_on_exec?
+    true
   end
 
   #

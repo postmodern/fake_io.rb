@@ -55,51 +55,24 @@ describe FakeIO do
     end
   end
 
-  if RUBY_VERSION > '1.9.'
-    context "when Ruby > 1.9" do
-      describe "#getc" do
-        it "should get a character" do
-          expect(subject.getc).to eq(expected_chars.first)
-        end
-      end
-
-      describe "#readchar" do
-        it "should read a char" do
-          expect(subject.readchar).to eq(expected_chars.first)
-        end
-      end
-
-      describe "#ungetc" do
-        it "should un-get characters back into the IO stream" do
-          data = subject.read(4)
-          data.each_char.reverse_each { |c| subject.ungetc(c) }
-
-          expect(subject.read(4)).to eq(data)
-        end
-      end
+  describe "#getc" do
+    it "should get a character" do
+      expect(subject.getc).to eq(expected_chars.first)
     end
-  else
-    context "when Ruby 1.8" do
-      describe "#getc" do
-        it "should get a character" do
-          expect(subject.getc).to eq(expected_bytes.first)
-        end
-      end
+  end
 
-      describe "#readchar" do
-        it "should read a char" do
-          expect(subject.readchar).to eq(expected_bytes.first)
-        end
-      end
+  describe "#readchar" do
+    it "should read a char" do
+      expect(subject.readchar).to eq(expected_chars.first)
+    end
+  end
 
-      describe "#ungetc" do
-        it "should un-get characters back into the IO stream" do
-          data = subject.read(4)
-          data.each_byte.reverse_each { |c| subject.ungetc(c) }
+  describe "#ungetc" do
+    it "should un-get characters back into the IO stream" do
+      data = subject.read(4)
+      data.each_char.reverse_each { |c| subject.ungetc(c) }
 
-          expect(subject.read(4)).to eq(data)
-        end
-      end
+      expect(subject.read(4)).to eq(data)
     end
   end
 
