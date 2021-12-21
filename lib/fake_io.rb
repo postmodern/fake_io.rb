@@ -110,7 +110,7 @@ module FakeIO
   #   The data read from the IO stream.
   #
   def read(length=nil,buffer=nil)
-    remaining = (length || (0.0 / 0))
+    remaining = (length || Float::INFINITY)
     result = ''
 
     each_chunk do |block|
