@@ -1,16 +1,16 @@
 require 'spec_helper'
-require 'ronin/post_exploitation/io'
+require 'fake_io'
 
-require 'post_exploitation/classes/fake_io'
+require 'classes/test_io'
 
-describe PostExploitation::IO do
+describe FakeIO do
   let(:expected_blocks) { ["one\n", "two\nthree\n", "four\n"] }
   let(:expected) { expected_blocks.join }
   let(:expected_bytes) { expected_blocks.join.each_byte.to_a }
   let(:expected_chars) { expected_blocks.join.each_char.to_a }
   let(:expected_lines) { expected_blocks.join.each_line.to_a }
 
-  subject { FakeIO.new }
+  subject { TestIO.new }
 
   describe "#io_initialize" do
     it "should open the IO stream" do

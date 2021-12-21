@@ -1,8 +1,8 @@
-require 'ronin/post_exploitation/io'
+require 'fake_io'
 
-class FakeIO
+class TestIO
   
-  include Ronin::PostExploitation::IO
+  include FakeIO
 
   def initialize
     @index = 0
