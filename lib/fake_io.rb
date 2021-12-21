@@ -1,7 +1,7 @@
 #
 # The {FakeIO} module provides an API for communicating with controlled
 # resources, that is still compatible with the standard
-# [IO](http://rubydoc.info/docs/ruby-core/1.9.2/IO) class.
+# [IO](http://rubydoc.info/stdlib/core/IO) class.
 #
 # To utilize the {FakeIO} module, simply include it into a class and define
 # either {#io_read} and/or {#io_write}, to handle the reading and writting
@@ -533,7 +533,7 @@ module FakeIO
   #
   # @note
   #   For compatibility with
-  #   [IO](http://rubydoc.info/docs/ruby-core/1.8.7/IO).
+  #   [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def isatty
     false
@@ -612,7 +612,7 @@ module FakeIO
   #
   # @note
   #   For compatibility with
-  #   [IO](http://rubydoc.info/docs/ruby-core/1.8.7/IO).
+  #   [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def rewind
     @lineno = 0
@@ -624,7 +624,7 @@ module FakeIO
   #
   # @note
   #   For compatibility with
-  #   [IO](http://rubydoc.info/docs/ruby-core/1.8.7/IO).
+  #   [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def binmode
     @binmode = true
@@ -636,7 +636,7 @@ module FakeIO
   #
   # @note
   #   For compatibility with
-  #   [IO](http://rubydoc.info/docs/ruby-core/1.8.7/IO).
+  #   [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def binmode?
     @binmode == true
@@ -647,7 +647,7 @@ module FakeIO
   #
   # @note
   #   For compatibility with
-  #   [IO](http://rubydoc.info/docs/ruby-core/1.9.2/IO).
+  #   [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def autoclose=(mode)
     self
@@ -658,7 +658,7 @@ module FakeIO
   #
   # @note
   #   For compatibility with
-  #   [IO](http://rubydoc.info/docs/ruby-core/1.9.2/IO).
+  #   [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def autoclose?
     true
@@ -669,7 +669,7 @@ module FakeIO
   #
   # @note
   #   For compatibility with
-  #   [IO](http://rubydoc.info/docs/ruby-core/1.9.2/IO).
+  #   [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def close_on_exec=(mode)
     self
@@ -680,7 +680,7 @@ module FakeIO
   #
   # @note
   #   For compatibility with
-  #   [IO](http://rubydoc.info/docs/ruby-core/1.9.2/IO).
+  #   [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def close_on_exec?
     true
@@ -707,7 +707,7 @@ module FakeIO
   #
   # @note
   #   For compatibility with
-  #   [IO](http://rubydoc.info/docs/ruby-core/1.8.7/IO).
+  #   [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def fsync
     fflush
@@ -719,7 +719,7 @@ module FakeIO
   #
   # @return [true]
   #   Returns `true` for compatibility with
-  #   [IO](http://rubydoc.info/docs/ruby-core/1.8.7/IO).
+  #   [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def sync
     true
@@ -731,7 +731,7 @@ module FakeIO
   #
   # @return [Boolean]
   #   Returns the sync mode, for compatibility with
-  #   [IO](http://rubydoc.info/docs/ruby-core/1.8.7/IO).
+  #   [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def sync=(mode)
     mode
@@ -742,7 +742,7 @@ module FakeIO
   #
   # @note
   #   For compatibility with
-  #   [IO](http://rubydoc.info/docs/ruby-core/1.8.7/IO).
+  #   [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def flush
     self
@@ -891,7 +891,7 @@ module FakeIO
   #
   # @note
   #   For compatibility with
-  #   [IO](http://rubydoc.info/docs/ruby-core/1.8.7/IO).
+  #   [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def to_io
     self
