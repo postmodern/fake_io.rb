@@ -897,8 +897,6 @@ module FakeIO
     self
   end
 
-  protected
-
   #
   # Place holder method used to open the IO stream.
   #
