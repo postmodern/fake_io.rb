@@ -25,6 +25,19 @@ module FakeIO
   # The file descriptor
   attr_reader :fd
 
+  #
+  # Initializes the IO stream.
+  #
+  def initialize
+    @lineno = 0
+
+    @read   = true
+    @write  = true
+    @closed = true
+
+    open
+  end
+
   alias tell pos
 
   #
@@ -924,19 +937,6 @@ module FakeIO
   end
 
   protected
-
-  #
-  # Initializes the IO stream.
-  #
-  def io_initialize
-    @lineno = 0
-
-    @read   = true
-    @write  = true
-    @closed = true
-
-    open
-  end
 
   #
   # Place holder method used to open the IO stream.

@@ -8,7 +8,7 @@ class TestIO
     @index = 0
     @blocks = ["one\n", "two\nthree\n", "four\n"]
 
-    io_initialize
+    super
   end
 
   protected

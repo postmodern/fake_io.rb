@@ -12,7 +12,7 @@ describe FakeIO do
 
   subject { TestIO.new }
 
-  describe "#io_initialize" do
+  describe "#initialize" do
     it "should open the IO stream" do
       expect(subject).not_to be_closed
     end
