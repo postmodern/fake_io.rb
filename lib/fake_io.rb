@@ -1,23 +1,4 @@
 #
-# fake_io - A mixin module for creating fake IO-like objects.
-#
-# Copyright (c) 2007-2013 Hal Brodigan (postmodern.mod3 at gmail.com)
-#
-# fake_io is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# fake_io is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with fake_io.  If not, see <https://www.gnu.org/licenses/>
-#
-
-#
 # The {FakeIO} module provides an API for communicating with controlled
 # resources, that is still compatible with the standard
 # [IO](http://rubydoc.info/docs/ruby-core/1.9.2/IO) class.
