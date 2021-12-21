@@ -4,11 +4,11 @@ require 'fake_io'
 require 'classes/test_io'
 
 describe FakeIO do
-  let(:expected_blocks) { ["one\n", "two\nthree\n", "four\n"] }
-  let(:expected) { expected_blocks.join }
-  let(:expected_bytes) { expected_blocks.join.each_byte.to_a }
-  let(:expected_chars) { expected_blocks.join.each_char.to_a }
-  let(:expected_lines) { expected_blocks.join.each_line.to_a }
+  let(:expected_chunks) { ["one\n", "two\nthree\n", "four\n"] }
+  let(:expected) { expected_chunks.join }
+  let(:expected_bytes) { expected_chunks.join.each_byte.to_a }
+  let(:expected_chars) { expected_chunks.join.each_char.to_a }
+  let(:expected_lines) { expected_chunks.join.each_line.to_a }
 
   subject { TestIO.new }
 
@@ -22,9 +22,9 @@ describe FakeIO do
     end
   end
 
-  describe "#each_block" do
+  describe "#each_chunk" do
     it "should read each block of data" do
-      expect(subject.each_block.to_a).to eq(expected_blocks)
+      expect(subject.each_chunk.to_a).to eq(expected_chunks)
     end
   end
 

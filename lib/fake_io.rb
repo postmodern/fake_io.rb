@@ -66,7 +66,7 @@ module FakeIO
   # @raise [IOError]
   #   The stream is closed for reading.
   #
-  def each_block
+  def each_chunk
     return enum_for(__method__) unless block_given?
 
     unless @read
@@ -113,7 +113,7 @@ module FakeIO
     remaining = (length || (0.0 / 0))
     result = ''
 
-    each_block do |block|
+    each_chunk do |block|
       if remaining < block.length
         result << block[0...remaining]
         append_buffer(block[remaining..-1])
@@ -323,7 +323,7 @@ module FakeIO
   def each_byte(&block)
     return enum_for(__method__) unless block
 
-    each_block { |chunk| chunk.each_byte(&block) }
+    each_chunk { |chunk| chunk.each_byte(&block) }
   end
 
   alias bytes each_byte
@@ -343,7 +343,7 @@ module FakeIO
   def each_char(&block)
     return enum_for(__method__) unless block
 
-    each_block { |chunk| chunk.each_char(&block) }
+    each_chunk { |chunk| chunk.each_char(&block) }
   end
 
   alias chars each_char
