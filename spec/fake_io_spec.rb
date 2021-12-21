@@ -22,84 +22,114 @@ describe FakeIO do
     end
   end
 
-  it "should read each block of data" do
-    expect(subject.each_block.to_a).to eq(expected_blocks)
+  describe "#each_block" do
+    it "should read each block of data" do
+      expect(subject.each_block.to_a).to eq(expected_blocks)
+    end
   end
 
-  it "should read all of the data" do
-    expect(subject.read).to eq(expected)
+  describe "#read" do
+    it "should read all of the data" do
+      expect(subject.read).to eq(expected)
+    end
+
+    it "should read partial sections of the data" do
+      expect(subject.read(3)).to eq(expected[0,3])
+      expect(subject.read(1)).to eq(expected[3,1])
+    end
+
+    it "should read individual blocks of data" do
+      expect(subject.read(4)).to eq(expected[0,4])
+    end
   end
 
-  it "should read partial sections of the data" do
-    expect(subject.read(3)).to eq(expected[0,3])
-    expect(subject.read(1)).to eq(expected[3,1])
+  describe "#gets" do
+    it "should get a line" do
+      expect(subject.gets).to eq(expected_lines.first)
+    end
   end
 
-  it "should read individual blocks of data" do
-    expect(subject.read(4)).to eq(expected[0,4])
-  end
-
-  it "should get a line" do
-    expect(subject.gets).to eq(expected_lines.first)
-  end
-
-  it "should read bytes" do
-    expect(subject.readbyte).to eq(expected_bytes.first)
+  describe "#readbyte" do
+    it "should read bytes" do
+      expect(subject.readbyte).to eq(expected_bytes.first)
+    end
   end
 
   if RUBY_VERSION > '1.9.'
     context "when Ruby > 1.9" do
-      it "should get a character" do
-        expect(subject.getc).to eq(expected_chars.first)
+      describe "#getc" do
+        it "should get a character" do
+          expect(subject.getc).to eq(expected_chars.first)
+        end
       end
 
-      it "should read a char" do
-        expect(subject.readchar).to eq(expected_chars.first)
+      describe "#readchar" do
+        it "should read a char" do
+          expect(subject.readchar).to eq(expected_chars.first)
+        end
       end
 
-      it "should un-get characters back into the IO stream" do
-        data = subject.read(4)
-        data.each_char.reverse_each { |c| subject.ungetc(c) }
+      describe "#ungetc" do
+        it "should un-get characters back into the IO stream" do
+          data = subject.read(4)
+          data.each_char.reverse_each { |c| subject.ungetc(c) }
 
-        expect(subject.read(4)).to eq(data)
+          expect(subject.read(4)).to eq(data)
+        end
       end
     end
   else
     context "when Ruby 1.8" do
-      it "should get a character" do
-        expect(subject.getc).to eq(expected_bytes.first)
+      describe "#getc" do
+        it "should get a character" do
+          expect(subject.getc).to eq(expected_bytes.first)
+        end
       end
 
-      it "should read a char" do
-        expect(subject.readchar).to eq(expected_bytes.first)
+      describe "#readchar" do
+        it "should read a char" do
+          expect(subject.readchar).to eq(expected_bytes.first)
+        end
       end
 
-      it "should un-get characters back into the IO stream" do
-        data = subject.read(4)
-        data.each_byte.reverse_each { |c| subject.ungetc(c) }
+      describe "#ungetc" do
+        it "should un-get characters back into the IO stream" do
+          data = subject.read(4)
+          data.each_byte.reverse_each { |c| subject.ungetc(c) }
 
-        expect(subject.read(4)).to eq(data)
+          expect(subject.read(4)).to eq(data)
+        end
       end
     end
   end
 
-  it "should read a line" do
-    expect(subject.readline).to eq(expected_lines.first)
+  describe "#readline" do
+    it "should read a line" do
+      expect(subject.readline).to eq(expected_lines.first)
+    end
   end
 
-  it "should read all lines" do
-    expect(subject.readlines).to eq(expected_lines)
+  describe "#readlines" do
+    it "should read all lines" do
+      expect(subject.readlines).to eq(expected_lines)
+    end
   end
 
-  it "should read each byte of data" do
-    expect(subject.each_byte.to_a).to eq(expected_bytes)
+  describe "#each_byte" do
+    it "should read each byte of data" do
+      expect(subject.each_byte.to_a).to eq(expected_bytes)
+    end
   end
 
-  it "should read each char of data" do
-    expect(subject.each_char.to_a).to eq(expected_chars)
+  describe "#each_char" do
+    it "should read each char of data" do
+      expect(subject.each_char.to_a).to eq(expected_chars)
+    end
   end
 
-  it "should read each line of data" do
-    expect(subject.each_line.to_a).to eq(expected_lines)
+  describe "#each_line" do
+    it "should read each line of data" do
+      expect(subject.each_line.to_a).to eq(expected_lines)
+    end
   end
 end
