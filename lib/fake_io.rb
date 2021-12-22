@@ -826,6 +826,76 @@ module FakeIO
   protected
 
   #
+  # Opens the IO stream.
+  #
+  # @return [IO]
+  #   The opened IO stream.
+  #
+  def open
+    @pos = 0
+    @eof = false
+
+    clear_buffer!
+
+    @fd = io_open
+    @closed = false
+    return self
+  end
+
+  #
+  # @group Abstract Methods
+  #
+
+  #
+  # Place holder method used to open the IO stream.
+  #
+  # @return [fd]
+  #   The abstract file-descriptor that represents the stream.
+  #
+  # @abstract
+  #
+  def io_open
+  end
+
+  #
+  # Place holder method used to read a block from the IO stream.
+  #
+  # @return [String]
+  #   Available data to be read.
+  #
+  # @raise [EOFError]
+  #   The end of the stream has been reached.
+  #
+  # @abstract
+  #
+  def io_read
+  end
+
+  #
+  # Place holder method used to write data to the IO stream.
+  #
+  # @param [String] data
+  #   The data to write to the IO stream.
+  #
+  # @abstract
+  #
+  def io_write(data)
+    0
+  end
+
+  #
+  # Place holder method used to close the IO stream.
+  #
+  # @abstract
+  #
+  def io_close
+  end
+
+  #
+  # @group Buffer Methods
+  #
+
+  #
   # Clears the read buffer.
   #
   def clear_buffer!
@@ -878,68 +948,6 @@ module FakeIO
 
     @buffer ||= ''
     @buffer << data
-  end
-
-  #
-  # Opens the IO stream.
-  #
-  # @return [IO]
-  #   The opened IO stream.
-  #
-  def open
-    @pos = 0
-    @eof = false
-
-    clear_buffer!
-
-    @fd = io_open
-    @closed = false
-    return self
-  end
-
-  #
-  # Place holder method used to open the IO stream.
-  #
-  # @return [fd]
-  #   The abstract file-descriptor that represents the stream.
-  #
-  # @abstract
-  #
-  def io_open
-  end
-
-  #
-  # Place holder method used to read a block from the IO stream.
-  #
-  # @return [String]
-  #   Available data to be read.
-  #
-  # @raise [EOFError]
-  #   The end of the stream has been reached.
-  #
-  # @abstract
-  #
-  def io_read
-  end
-
-  #
-  # Place holder method used to write data to the IO stream.
-  #
-  # @param [String] data
-  #   The data to write to the IO stream.
-  #
-  # @abstract
-  #
-  def io_write(data)
-    0
-  end
-
-  #
-  # Place holder method used to close the IO stream.
-  #
-  # @abstract
-  #
-  def io_close
   end
 
 end
