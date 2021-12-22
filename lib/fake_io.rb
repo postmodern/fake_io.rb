@@ -87,7 +87,7 @@ module FakeIO
       end
 
       unless chunk.empty?
-        @pos += chunk.length
+        @pos += chunk.bytesize
         yield chunk
       else
         # short read
@@ -114,13 +114,13 @@ module FakeIO
     result = ''
 
     each_chunk do |chunk|
-      if remaining < chunk.length
-        result << chunk[0...remaining]
-        append_buffer(chunk[remaining..-1])
+      if remaining < chunk.bytesize
+        result << chunk.byteslice(0,remaining)
+        append_buffer(chunk.byteslice(remaining,chunk.bytesize - remaining))
         break
       else
         result << chunk
-        remaining -= chunk.length
+        remaining -= chunk.bytesize
       end
 
       # no more data to read
@@ -920,7 +920,7 @@ module FakeIO
   #
   def read_buffer
     chunk = @buffer
-    @pos += @buffer.length
+    @pos += @buffer.bytesize
 
     clear_buffer!
     return chunk
@@ -944,7 +944,7 @@ module FakeIO
   #   The data to append.
   #
   def append_buffer(data)
-    @pos -= data.length
+    @pos -= data.bytesize
 
     @buffer ||= ''
     @buffer << data
