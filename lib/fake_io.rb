@@ -110,24 +110,26 @@ module FakeIO
   #   The data read from the IO stream.
   #
   def read(length=nil,buffer=nil)
-    bytes_read = (length || Float::INFINITY)
+    bytes_remaining = (length || Float::INFINITY)
     result = String.new
 
     each_chunk do |chunk|
-      if bytes_read < chunk.bytesize
-        fragment  = chunk.byteslice(0,bytes_read)
-        remaining = chunk.byteslice(bytes_read,chunk.bytesize - bytes_read)
+      if bytes_remaining < chunk.bytesize
+        fragment  = chunk.byteslice(0,bytes_remaining)
+
+        remaining_length = chunk.bytesize - bytes_remaining
+        remaining_data   = chunk.byteslice(bytes_remaining,remaining_length)
 
         result << fragment
-        append_buffer(remaining)
+        append_buffer(remaining_data)
         break
       else
         result << chunk
-        bytes_read -= chunk.bytesize
+        bytes_remaining -= chunk.bytesize
       end
 
       # no more data to read
-      break if bytes_read == 0
+      break if bytes_remaining == 0
     end
 
     unless result.empty?
