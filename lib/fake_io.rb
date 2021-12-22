@@ -39,6 +39,7 @@ module FakeIO
     @closed = true
 
     @binmode = false
+    @tty     = false
 
     open
   end
@@ -517,21 +518,23 @@ module FakeIO
   end
 
   #
-  # @return [false]
+  # Indicates whether the IO stream is associated with a terminal device.
+  #
+  # @return [Boolean]
   #
   # @note
   #   For compatibility with
   #   [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def isatty
-    false
+    @tty
   end
 
   #
   # @see #isatty
   #
   def tty?
-    isatty
+    @tty
   end
 
   #
