@@ -803,6 +803,17 @@ module FakeIO
   end
 
   #
+  # @return [IO]
+  #
+  # @note
+  #   For compatibility with
+  #   [IO](http://rubydoc.info/stdlib/core/IO).
+  #
+  def to_io
+    self
+  end
+
+  #
   # Inspects the IO stream.
   #
   # @return [String]
@@ -884,17 +895,6 @@ module FakeIO
     @fd = io_open
     @closed = false
     return self
-  end
-
-  #
-  # @return [IO]
-  #
-  # @note
-  #   For compatibility with
-  #   [IO](http://rubydoc.info/stdlib/core/IO).
-  #
-  def to_io
-    self
   end
 
   #

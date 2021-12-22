@@ -105,4 +105,10 @@ describe FakeIO do
       expect(subject.each_line.to_a).to eq(expected_lines)
     end
   end
+
+  describe "#to_io" do
+    it "must return self" do
+      expect(subject.to_io).to be(subject)
+    end
+  end
 end
