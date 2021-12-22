@@ -27,6 +27,9 @@ module FakeIO
   # The file descriptor
   attr_reader :fd
 
+  alias fileno fd
+  alias to_i fd
+
   #
   # Initializes the IO stream.
   #
@@ -496,18 +499,6 @@ module FakeIO
   end
 
   alias << write
-
-  #
-  # The number of the file descriptor.
-  #
-  # @return [Integer, nil]
-  #   The file descriptor, if it is an `Integer`.
-  #
-  def fileno
-    @fd if @fd.kind_of?(Integer)
-  end
-
-  alias to_i fileno
 
   #
   # @raise [NotImplementedError]
