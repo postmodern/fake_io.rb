@@ -29,11 +29,12 @@ module FakeIO
   # Initializes the IO stream.
   #
   def initialize
-    @lineno = 0
-
     @read   = true
     @write  = true
     @closed = true
+
+    @binmode = false
+    @lineno  = 0
 
     open
   end
