@@ -34,7 +34,6 @@ module FakeIO
     @closed = true
 
     @binmode = false
-    @lineno  = 0
 
     open
   end
@@ -838,8 +837,9 @@ module FakeIO
   #   The opened IO stream.
   #
   def open
-    @pos = 0
-    @eof = false
+    @pos    = 0
+    @lineno = 0
+    @eof    = false
 
     clear_buffer!
 
