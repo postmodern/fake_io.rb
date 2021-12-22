@@ -43,6 +43,25 @@ describe FakeIO do
     end
   end
 
+  describe "#readpartial" do
+    let(:length) { 3 }
+
+    it "must read at most N bytes" do
+      expect(subject.readpartial(length).length).to eq(length)
+    end
+
+    context "when also given a buffer" do
+      let(:buffer) { String.new }
+
+      it "must append the read bytes to the buffer" do
+        subject.readpartial(length,buffer)
+        subject.readpartial(length,buffer)
+
+        expect(buffer).to eq(expected[0,length * 2])
+      end
+    end
+  end
+
   describe "#gets" do
     it "should get a line" do
       expect(subject.gets).to eq(expected_lines.first)
