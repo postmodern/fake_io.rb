@@ -22,6 +22,8 @@ module FakeIO
   # The end-of-file indicator
   attr_reader :eof
 
+  alias eof? eof
+
   # The file descriptor
   attr_reader :fd
 
@@ -39,16 +41,6 @@ module FakeIO
   end
 
   alias tell pos
-
-  #
-  # Determines if end-of-file has been reached.
-  #
-  # @return [Boolean]
-  #   Specifies whether end-of-file has been reached.
-  #
-  def eof?
-    @eof == true
-  end
 
   #
   # Iterates over each block within the IO stream.
