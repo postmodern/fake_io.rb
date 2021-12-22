@@ -111,7 +111,7 @@ module FakeIO
   #
   def read(length=nil,buffer=nil)
     bytes_read = (length || Float::INFINITY)
-    result = ''
+    result = String.new
 
     each_chunk do |chunk|
       if bytes_read < chunk.bytesize
@@ -236,7 +236,7 @@ module FakeIO
     # if no separator is given, read everything
     return read if separator.nil?
 
-    line = ''
+    line = String.new
 
     while (c = read(1))
       line << c
@@ -936,7 +936,7 @@ module FakeIO
   #   The data to prepend.
   #
   def prepend_buffer(data)
-    @buffer ||= ''
+    @buffer ||= String.new
     @buffer.insert(0,data)
   end
 
@@ -949,7 +949,7 @@ module FakeIO
   def append_buffer(data)
     @pos -= data.bytesize
 
-    @buffer ||= ''
+    @buffer ||= String.new
     @buffer << data
   end
 
