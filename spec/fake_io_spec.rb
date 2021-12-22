@@ -29,17 +29,42 @@ describe FakeIO do
   end
 
   describe "#read" do
-    it "should read all of the data" do
-      expect(subject.read).to eq(expected)
+    context "when no length is given" do
+      it "should read all of the data" do
+        expect(subject.read).to eq(expected)
+      end
+
+      context "and when a buffer is also given" do
+        let(:buffer) { String.new }
+
+        it "must append the all read bytes to the buffer" do
+          subject.read(nil,buffer)
+
+          expect(buffer).to eq(expected)
+        end
+      end
     end
 
-    it "should read partial sections of the data" do
-      expect(subject.read(3)).to eq(expected[0,3])
-      expect(subject.read(1)).to eq(expected[3,1])
-    end
+    context "when a length is given" do
+      it "should read partial sections of the data" do
+        expect(subject.read(3)).to eq(expected[0,3])
+        expect(subject.read(1)).to eq(expected[3,1])
+      end
 
-    it "should read individual blocks of data" do
-      expect(subject.read(4)).to eq(expected[0,4])
+      it "should read individual blocks of data" do
+        expect(subject.read(4)).to eq(expected[0,4])
+      end
+
+      context "and when a buffer is also given" do
+        let(:buffer) { String.new }
+
+        it "must append the read bytes to the buffer" do
+          subject.read(3,buffer)
+          subject.read(1,buffer)
+
+          expect(buffer).to eq(expected[0,3 + 1])
+        end
+      end
     end
   end
 
