@@ -10,7 +10,7 @@ describe FakeIO do
   let(:expected_chars) { expected_chunks.join.each_char.to_a }
   let(:expected_lines) { expected_chunks.join.each_line.to_a }
 
-  subject { TestIO.new }
+  subject { TestIO.new(expected_chunks) }
 
   describe "#initialize" do
     it "should open the IO stream" do
@@ -53,6 +53,14 @@ describe FakeIO do
 
       it "should read individual blocks of data" do
         expect(subject.read(4)).to eq(expected[0,4])
+      end
+
+      context "but the data is UTF-8" do
+        let(:expected_chunks) { ["Σὲ ", "γνωρίζω ἀπὸ", " τὴν κόψη"] }
+
+        it "must read exactly N bytes, not N chars" do
+          expect(subject.read(1)).to eq(expected.byteslice(0,1))
+        end
       end
 
       context "and when a buffer is also given" do

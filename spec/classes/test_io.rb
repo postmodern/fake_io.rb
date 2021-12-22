@@ -4,11 +4,11 @@ class TestIO
   
   include FakeIO
 
-  def initialize
-    @index = 0
-    @blocks = ["one\n", "two\nthree\n", "four\n"]
+  def initialize(chunks)
+    @index  = 0
+    @blocks = chunks
 
-    super
+    super()
   end
 
   protected
