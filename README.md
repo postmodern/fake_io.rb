@@ -15,6 +15,7 @@
 
 * Supports (almost) all of the usual [IO] methods by default.
 * Emulates buffered I/O.
+* UTF-8 aware.
 * Can be included into any Class.
 * Zero dependencies.
 
