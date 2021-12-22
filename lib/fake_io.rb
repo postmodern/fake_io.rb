@@ -79,16 +79,16 @@ module FakeIO
     until @eof
       begin
         # no data currently available, sleep and retry
-        until (block = io_read)
+        until (chunk = io_read)
           sleep(1)
         end
       rescue EOFError
         break
       end
 
-      unless block.empty?
-        @pos += block.length
-        yield block
+      unless chunk.empty?
+        @pos += chunk.length
+        yield chunk
       else
         # short read
         @eof = true
@@ -113,14 +113,14 @@ module FakeIO
     remaining = (length || Float::INFINITY)
     result = ''
 
-    each_chunk do |block|
-      if remaining < block.length
-        result << block[0...remaining]
-        append_buffer(block[remaining..-1])
+    each_chunk do |chunk|
+      if remaining < chunk.length
+        result << chunk[0...remaining]
+        append_buffer(chunk[remaining..-1])
         break
       else
-        result << block
-        remaining -= block.length
+        result << chunk
+        remaining -= chunk.length
       end
 
       # no more data to read
