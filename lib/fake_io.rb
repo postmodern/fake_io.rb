@@ -399,7 +399,6 @@ module FakeIO
   end
 
   alias each each_line
-  alias lines each_line
 
   #
   # Reads every line from the IO stream.
