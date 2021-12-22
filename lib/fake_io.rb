@@ -370,8 +370,6 @@ module FakeIO
     each_char { |c| yield c.ord }
   end
 
-  alias codepoints each_codepoint
-
   #
   # Iterates over each line in the IO stream.
   #
