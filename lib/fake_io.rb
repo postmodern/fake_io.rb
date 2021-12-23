@@ -326,8 +326,6 @@ module FakeIO
     each_chunk { |chunk| chunk.each_byte(&block) }
   end
 
-  alias bytes each_byte
-
   #
   # Iterates over each character in the IO stream.
   #
