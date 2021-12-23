@@ -36,7 +36,9 @@ module FakeIO
   def initialize
     @read   = true
     @write  = true
-    @closed = true
+
+    @closed    = true
+    @autoclose = true
 
     @binmode = false
     @tty     = false
@@ -631,16 +633,11 @@ module FakeIO
     @binmode == true
   end
 
-  #
-  # @return [IO]
+  # Sets whether the IO stream will be auto-closed when finalized.
   #
   # @note
-  #   For compatibility with
-  #   [IO](http://rubydoc.info/stdlib/core/IO).
-  #
-  def autoclose=(mode)
-    self
-  end
+  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
+  attr_writer :autoclose
 
   #
   # @return [true]
@@ -650,7 +647,7 @@ module FakeIO
   #   [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def autoclose?
-    true
+    @autoclose
   end
 
   #
