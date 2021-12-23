@@ -603,6 +603,8 @@ module FakeIO
   #
   def rewind
     seek(0,SEEK_SET)
+
+    @pos    = 0
     @lineno = 0
   end
 
