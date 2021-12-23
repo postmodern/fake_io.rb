@@ -344,8 +344,6 @@ module FakeIO
     each_chunk { |chunk| chunk.each_char(&block) }
   end
 
-  alias chars each_char
-
   #
   # Passes the Integer ordinal of each character in the stream.
   #
