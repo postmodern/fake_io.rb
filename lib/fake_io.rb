@@ -498,13 +498,11 @@ module FakeIO
 
   alias << write
 
+  # The PID associated with the IO stream.
   #
-  # @raise [NotImplementedError]
-  #   {#pid} is not implemented.
-  #
-  def pid
-    raise(NotImplementedError,"#{self.class}#pid is not implemented")
-  end
+  # @return [Integer, nil]
+  #   Returns the PID number or `nil`. Returns `nil` by default.
+  attr_reader :pid
 
   #
   # @raise [NotImplementedError]
@@ -554,6 +552,7 @@ module FakeIO
   #
   def pos=(new_pos)
     seek(new_pos,SEEK_SET)
+    @pos = new_pos
   end
 
   #
