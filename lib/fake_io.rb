@@ -326,6 +326,17 @@ module FakeIO
     each_chunk { |chunk| chunk.each_byte(&block) }
   end
 
+  if RUBY_VERSION < '3.'
+    #
+    # Deprecated alias to {#each_bytes}.
+    #
+    # @deprecated Removed in Ruby 3.0.
+    #
+    def bytes
+      each_byte
+    end
+  end
+
   #
   # Iterates over each character in the IO stream.
   #
@@ -342,6 +353,17 @@ module FakeIO
     return enum_for(__method__) unless block
 
     each_chunk { |chunk| chunk.each_char(&block) }
+  end
+
+  if RUBY_VERSION < '3.'
+    #
+    # Deprecated alias to {#each_char}.
+    #
+    # @deprecated Removed in Ruby 3.0.
+    #
+    def chars
+      each_char
+    end
   end
 
   #
@@ -363,6 +385,17 @@ module FakeIO
     return enum_for(__method__) unless block_given?
 
     each_char { |c| yield c.ord }
+  end
+
+  if RUBY_VERSION < '3.'
+    #
+    # Deprecated alias to {#each_codepoint}.
+    #
+    # @deprecated Removed in Ruby 3.0
+    #
+    def codepoints
+      each_codepoint
+    end
   end
 
   #
@@ -394,6 +427,17 @@ module FakeIO
   end
 
   alias each each_line
+
+  if RUBY_VERSION < '3.'
+    #
+    # Deprecated alias to {#each_line}.
+    #
+    # @deprecated Removed in Ruby 3.0.
+    #
+    def lines(*args)
+      each_line(*args)
+    end
+  end
 
   #
   # Reads every line from the IO stream.

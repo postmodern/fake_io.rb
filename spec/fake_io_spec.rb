@@ -277,4 +277,44 @@ describe FakeIO do
       expect(subject.to_io).to be(subject)
     end
   end
+
+  context "when running under Ruby 2.x" do
+    if RUBY_VERSION < '3.'
+      it "must define #bytes" do
+        expect(subject).to respond_to(:bytes)
+      end
+
+      it "must define #chars" do
+        expect(subject).to respond_to(:chars)
+      end
+
+      it "must define #codepoints" do
+        expect(subject).to respond_to(:codepoints)
+      end
+
+      it "must define #lines" do
+        expect(subject).to respond_to(:lines)
+      end
+    end
+  end
+
+  context "when running under Ruby 3.x" do
+    if RUBY_VERSION > '3.'
+      it "must not define #bytes" do
+        expect(subject).to_not respond_to(:bytes)
+      end
+
+      it "must not define #chars" do
+        expect(subject).to_not respond_to(:chars)
+      end
+
+      it "must not define #codepoints" do
+        expect(subject).to_not respond_to(:codepoints)
+      end
+
+      it "must not define #lines" do
+        expect(subject).to_not respond_to(:lines)
+      end
+    end
+  end
 end
