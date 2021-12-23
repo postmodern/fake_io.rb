@@ -37,8 +37,9 @@ module FakeIO
     @read   = true
     @write  = true
 
-    @closed    = true
-    @autoclose = true
+    @closed        = true
+    @autoclose     = true
+    @close_on_exec = true
 
     @binmode = false
     @tty     = false
@@ -650,26 +651,22 @@ module FakeIO
     @autoclose
   end
 
-  #
-  # @return [IO]
+  # Sets the close-on-exec flag.
   #
   # @note
-  #   For compatibility with
-  #   [IO](http://rubydoc.info/stdlib/core/IO).
-  #
-  def close_on_exec=(mode)
-    self
-  end
+  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
+  attr_writer :close_on_exec
 
   #
-  # @return [true]
+  # Indicates whether the close-on-exec flag is set.
+  #
+  # @return [Boolean]
   #
   # @note
-  #   For compatibility with
-  #   [IO](http://rubydoc.info/stdlib/core/IO).
+  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def close_on_exec?
-    true
+    @close_on_exec
   end
 
   #
