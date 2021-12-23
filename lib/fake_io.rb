@@ -4,7 +4,7 @@
 # [IO](http://rubydoc.info/stdlib/core/IO) class.
 #
 # To utilize the {FakeIO} module, simply include it into a class and define
-# either {#io_read} and/or {#io_write}, to handle the reading and writting
+# either {#io_read} and/or {#io_write}, to handle the reading and writing
 # of data.
 #
 # The {#io_open} method handles optionally opening and assigning the
@@ -461,11 +461,11 @@ module FakeIO
   #   The number of bytes written.
   #
   # @raise [IOError]
-  #   The stream is closed for writting.
+  #   The stream is closed for writing.
   #
   def write(data)
     unless @write
-      raise(IOError,"closed for writting")
+      raise(IOError,"closed for writing")
     end
 
     io_write(data.to_s) if @write
