@@ -602,8 +602,8 @@ module FakeIO
   #   [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def rewind
-    @lineno = 0
     seek(0,SEEK_SET)
+    @lineno = 0
   end
 
   #
