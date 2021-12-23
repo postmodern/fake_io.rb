@@ -24,12 +24,6 @@ module FakeIO
 
   alias eof? eof
 
-  # The file descriptor
-  attr_reader :fd
-
-  alias fileno fd
-  alias to_i fd
-
   #
   # Initializes the IO stream.
   #
@@ -766,6 +760,30 @@ module FakeIO
     @write  = false
     @closed = true
     return nil
+  end
+
+  #
+  # The file descriptor
+  #
+  # @return [Integer]
+  #
+  # @note
+  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
+  #
+  def fileno
+    @fd
+  end
+
+  #
+  # The file descriptor
+  #
+  # @return [Integer]
+  #
+  # @note
+  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
+  #
+  def to_i
+    @fd
   end
 
   #
