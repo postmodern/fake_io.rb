@@ -44,6 +44,8 @@ module FakeIO
     @binmode = false
     @tty     = false
 
+    @sync = false
+
     open
   end
 
@@ -521,8 +523,7 @@ module FakeIO
   # @return [Boolean]
   #
   # @note
-  #   For compatibility with
-  #   [IO](http://rubydoc.info/stdlib/core/IO).
+  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def isatty
     @tty
@@ -601,8 +602,7 @@ module FakeIO
   # @see #seek
   #
   # @note
-  #   For compatibility with
-  #   [IO](http://rubydoc.info/stdlib/core/IO).
+  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def rewind
     seek(0,SEEK_SET)
@@ -615,8 +615,7 @@ module FakeIO
   # @return [IO]
   #
   # @note
-  #   For compatibility with
-  #   [IO](http://rubydoc.info/stdlib/core/IO).
+  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def binmode
     @binmode = true
@@ -627,8 +626,7 @@ module FakeIO
   # @return [Boolean]
   #
   # @note
-  #   For compatibility with
-  #   [IO](http://rubydoc.info/stdlib/core/IO).
+  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def binmode?
     @binmode == true
@@ -644,8 +642,7 @@ module FakeIO
   # @return [true]
   #
   # @note
-  #   For compatibility with
-  #   [IO](http://rubydoc.info/stdlib/core/IO).
+  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def autoclose?
     @autoclose
@@ -700,33 +697,18 @@ module FakeIO
 
   alias fdatasync fsync
 
-  #
-  # @return [true]
-  #   Returns `true` for compatibility with
-  #   [IO](http://rubydoc.info/stdlib/core/IO).
-  #
-  def sync
-    true
-  end
-
-  #
-  # @param [Boolean] mode
-  #   The sync mode.
+  # The sync flag.
   #
   # @return [Boolean]
   #   Returns the sync mode, for compatibility with
   #   [IO](http://rubydoc.info/stdlib/core/IO).
-  #
-  def sync=(mode)
-    mode
-  end
+  attr_accessor :sync
 
   #
   # @return [IO]
   #
   # @note
-  #   For compatibility with
-  #   [IO](http://rubydoc.info/stdlib/core/IO).
+  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def flush
     self
@@ -790,8 +772,7 @@ module FakeIO
   # @return [IO]
   #
   # @note
-  #   For compatibility with
-  #   [IO](http://rubydoc.info/stdlib/core/IO).
+  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def to_io
     self
