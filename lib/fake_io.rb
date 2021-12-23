@@ -686,14 +686,15 @@ module FakeIO
   end
 
   #
+  # Immediately writes all buffered data.
+  #
   # @return [0]
   #
   # @note
-  #   For compatibility with
-  #   [IO](http://rubydoc.info/stdlib/core/IO).
+  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def fsync
-    fflush
+    flush
     return 0
   end
 
