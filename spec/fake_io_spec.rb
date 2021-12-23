@@ -17,8 +17,122 @@ describe FakeIO do
       expect(subject).not_to be_closed
     end
 
+    it "must default #autoclose? to true" do
+      expect(subject.autoclose?).to be(true)
+    end
+
+    it "must default #close_on_exec? to true" do
+      expect(subject.close_on_exec?).to be(true)
+    end
+
     it "should set the file descriptor returned by io_open" do
-      expect(subject.fd).to eq(3)
+      expect(subject.fileno).to eq(3)
+    end
+
+    it "must set #pos to 0" do
+      expect(subject.pos).to eq(0)
+    end
+
+    it "must set #lineno to 0" do
+      expect(subject.lineno).to eq(0)
+    end
+
+    it "must set #eof to false" do
+      expect(subject.eof).to be(false)
+    end
+
+    it "must default #tty? to false" do
+      expect(subject.tty?).to be(false)
+    end
+
+    it "must default #pid to nil" do
+      expect(subject.pid).to be(nil)
+    end
+
+    it "must default #sync to false" do
+      expect(subject.sync).to be(false)
+    end
+  end
+
+  describe "#autoclose=" do
+    let(:autoclose) { false }
+
+    before { subject.autoclose = autoclose }
+
+    it "must set #autoclose?" do
+      expect(subject.autoclose?).to be(autoclose)
+    end
+  end
+
+  describe "#autoclose?" do
+    it "must return true by default" do
+      expect(subject.autoclose?).to be(true)
+    end
+
+    context "when #autoclose= is set to false" do
+      before { subject.autoclose = false }
+
+      it "must return false" do
+        expect(subject.autoclose?).to be(false)
+      end
+    end
+  end
+
+  describe "#close_on_exec=" do
+    let(:close_on_exec) { false }
+
+    before { subject.close_on_exec = close_on_exec }
+
+    it "must set #close_on_exec?" do
+      expect(subject.close_on_exec?).to be(close_on_exec)
+    end
+  end
+
+  describe "#close_on_exec?" do
+    it "must return true by default" do
+      expect(subject.close_on_exec?).to be(true)
+    end
+
+    context "when #close_on_exec= is set to false" do
+      before { subject.close_on_exec = false }
+
+      it "must return false" do
+        expect(subject.close_on_exec?).to be(false)
+      end
+    end
+  end
+
+  describe "#binmode" do
+    before { subject.binmode }
+
+    it "must cause #binmode? to return true" do
+      expect(subject.binmode?).to be(true)
+    end
+  end
+
+  describe "#binmode?" do
+    it "must return false by default" do
+      expect(subject.binmode?).to be(false)
+    end
+
+    context "when binmode is set" do
+      before { subject.binmode }
+
+      it "must return true" do
+        expect(subject.binmode?).to be(true)
+      end
+    end
+  end
+
+  describe "#isatty" do
+    it "must return false by default" do
+      expect(subject.isatty).to be(false)
+    end
+  end
+
+  describe "#tty?" do
+    it "must return false by default" do
+      expect(subject.tty?).to be(false)
     end
   end
 
