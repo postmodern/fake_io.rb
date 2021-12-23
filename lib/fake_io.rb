@@ -915,6 +915,8 @@ module FakeIO
   def io_close
   end
 
+  private
+
   #
   # @group Buffer Methods
   #
