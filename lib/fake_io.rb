@@ -556,8 +556,7 @@ module FakeIO
   #
   # @return [Boolean]
   #
-  # @note
-  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
+  # @note For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def isatty
     @tty
@@ -635,8 +634,7 @@ module FakeIO
   #
   # @see #seek
   #
-  # @note
-  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
+  # @note For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def rewind
     seek(0,SEEK_SET)
@@ -648,8 +646,7 @@ module FakeIO
   #
   # @return [IO]
   #
-  # @note
-  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
+  # @note For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def binmode
     @binmode = true
@@ -659,8 +656,7 @@ module FakeIO
   #
   # @return [Boolean]
   #
-  # @note
-  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
+  # @note For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def binmode?
     @binmode == true
@@ -668,15 +664,13 @@ module FakeIO
 
   # Sets whether the IO stream will be auto-closed when finalized.
   #
-  # @note
-  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
+  # @note For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   attr_writer :autoclose
 
   #
   # @return [true]
   #
-  # @note
-  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
+  # @note For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def autoclose?
     @autoclose
@@ -684,8 +678,7 @@ module FakeIO
 
   # Sets the close-on-exec flag.
   #
-  # @note
-  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
+  # @note For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   attr_writer :close_on_exec
 
   #
@@ -693,8 +686,7 @@ module FakeIO
   #
   # @return [Boolean]
   #
-  # @note
-  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
+  # @note For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def close_on_exec?
     @close_on_exec
@@ -721,8 +713,7 @@ module FakeIO
   #
   # @return [0]
   #
-  # @note
-  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
+  # @note For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def fsync
     flush
@@ -741,8 +732,7 @@ module FakeIO
   #
   # @return [IO]
   #
-  # @note
-  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
+  # @note For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def flush
     self
@@ -807,8 +797,7 @@ module FakeIO
   #
   # @return [Integer]
   #
-  # @note
-  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
+  # @note For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def fileno
     @fd
@@ -819,8 +808,7 @@ module FakeIO
   #
   # @return [Integer]
   #
-  # @note
-  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
+  # @note For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def to_i
     @fd
@@ -829,8 +817,7 @@ module FakeIO
   #
   # @return [IO]
   #
-  # @note
-  #   For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
+  # @note For compatibility with [IO](http://rubydoc.info/stdlib/core/IO).
   #
   def to_io
     self
