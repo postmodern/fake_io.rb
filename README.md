@@ -1,4 +1,4 @@
-# fake_io.rb
+# fake_io
 
 [![CI](https://github.com/postmodern/fake_io.rb/actions/workflows/ruby.yml/badge.svg)](https://github.com/postmodern/fake_io.rb/actions/workflows/ruby.yml)
 [![Gem Version](https://badge.fury.io/rb/fake_io.svg)](https://badge.fury.io/rb/fake_io)
