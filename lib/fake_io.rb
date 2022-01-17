@@ -58,6 +58,8 @@ module FakeIO
   #
   # @return [nil]
   #
+  # @note Not implemented by default.
+  #
   # @see https://man7.org/linux/man-pages/man2/posix_fadvise.2.html
   #
   def advise(advice,offset=0,len=0)
