@@ -54,6 +54,12 @@ describe FakeIO do
     end
   end
 
+  describe "#advise" do
+    it "must return nil" do
+      expect(subject.advise(:normal,0,0)).to be(nil)
+    end
+  end
+
   describe "#autoclose=" do
     let(:autoclose) { false }
 

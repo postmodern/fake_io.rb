@@ -43,6 +43,27 @@ module FakeIO
     open
   end
 
+  #
+  # Announce an intention to access data from the current file in a specific
+  # pattern.
+  #
+  # @param [:normal, :sequential, :random, :willneed, :dontneed, :noreuse] advice
+  #   The advice mode.
+  #
+  # @param [Integer] offset
+  #   The offset within the file.
+  #
+  # @param [Integer] len
+  #   The length 
+  #
+  # @return [nil]
+  #
+  # @see https://man7.org/linux/man-pages/man2/posix_fadvise.2.html
+  #
+  def advise(advice,offset=0,len=0)
+    # no-op
+  end
+
   alias tell pos
 
   #
