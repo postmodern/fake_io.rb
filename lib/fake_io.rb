@@ -593,11 +593,16 @@ module FakeIO
   end
 
   #
-  # @raise [NotImplementedError]
-  #   {#seek} is not implemented.
+  # @param [Integer] new_pos
+  #   The desired new position, relative to `whence`.
+  #
+  # @param [File::SEEK_CUR, File::SEEK_DATA, File::SEEK_END, File::SEEK_HOLE, File::SEEK_SET] whence
+  #
+  # @return [0]
   #
   def seek(new_pos,whence=SEEK_SET)
-    raise(NotImplementedError,"#{self.class}#seek is not implemented")
+    io_seek(new_pos,whence)
+    return 0
   end
 
   #
@@ -889,6 +894,23 @@ module FakeIO
   # @abstract
   #
   def io_open
+  end
+
+  #
+  # Place holder method used to seek to a position within the IO stream.
+  #
+  # @param [Integer] new_pos
+  #   The desired new position, relative to `whence`.
+  #
+  # @param [File::SEEK_CUR, File::SEEK_DATA, File::SEEK_END, File::SEEK_HOLE, File::SEEK_SET] whence
+  #
+  # @raise [NotImplementedError]
+  #   By default a `NotImplementedError` exception will be raised.
+  #
+  # @abstract
+  #
+  def io_seek(new_pos,whence)
+    raise(NotImplementedError,"#{self.class}#io_seek is not implemented")
   end
 
   #
