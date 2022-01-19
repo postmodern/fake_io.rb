@@ -652,6 +652,7 @@ module FakeIO
   #
   def seek(new_pos,whence=SEEK_SET)
     io_seek(new_pos,whence)
+    clear_buffer!
     return 0
   end
 
