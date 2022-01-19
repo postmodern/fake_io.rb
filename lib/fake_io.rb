@@ -373,7 +373,7 @@ module FakeIO
   #   If no block is given, an enumerator object will be returned.
   #
   def each_char(&block)
-     enum_for(__method__) unless block
+    return enum_for(__method__) unless block
 
     each_chunk { |chunk| chunk.each_char(&block) }
   end
