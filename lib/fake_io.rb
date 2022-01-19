@@ -373,7 +373,7 @@ module FakeIO
   #   If no block is given, an enumerator object will be returned.
   #
   def each_char(&block)
-    return enum_for(__method__) unless block
+     enum_for(__method__) unless block
 
     each_chunk { |chunk| chunk.each_char(&block) }
   end
@@ -496,6 +496,56 @@ module FakeIO
 
   alias syswrite write
   alias write_nonblock write
+
+  #
+  # Reads data at a given offset, without changing the current {#pos}.
+  #
+  # @param [Integer] maxlen
+  #   The maximum amount of data to read. If `nil` is given, the entire
+  #   IO stream will be read.
+  #
+  # @param [Integer] offset
+  #   The offset to read the data at.
+  #
+  # @param [#<<, nil] outbuf
+  #   The optional buffer to append the data to.
+  #
+  # @return [String]
+  #   The data read from the IO stream.
+  #
+  # @see #read
+  #
+  def pread(maxlen,offset,outbuf)
+    old_pos = pos
+    seek(offset)
+
+    data = read(maxlen,outbuf)
+    seek(old_pos)
+    return data
+  end
+
+  #
+  # Writes data to the given offset, without changing the current {#pos}.
+  #
+  # @param [String] data
+  #   The data to write.
+  #
+  # @param [Integer] offset
+  #   The offset to write the data to.
+  #
+  # @return [Integer]
+  #   The number of bytes written.
+  #
+  # @see #write
+  #
+  def pwrite(string,offset)
+    old_pos = pos
+    seek(offset)
+
+    bytes_written = write(string)
+    seek(old_pos)
+    return bytes_written
+  end
 
   #
   # Writes a byte or a character to the IO stream.
