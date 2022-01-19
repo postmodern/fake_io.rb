@@ -267,8 +267,18 @@ describe FakeIO do
   end
 
   describe "#each_char" do
-    it "should read each char of data" do
-      expect(subject.each_char.to_a).to eq(chars)
+    context "when a block is given" do
+      it "must yield each read char of the data" do
+        expect { |b|
+          subject.each_char(&b)
+        }.to yield_successive_args(*chars)
+      end
+    end
+
+    context "when no block is given" do
+      it "must return an Enumerator that read each char of data" do
+        expect(subject.each_char.to_a).to eq(chars)
+      end
     end
   end
 
