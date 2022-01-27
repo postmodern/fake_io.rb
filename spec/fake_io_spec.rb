@@ -197,6 +197,12 @@ describe FakeIO do
       end
     end
 
+    describe "#getbyte" do
+      it "should get byte" do
+        expect(subject.getbyte).to eq(bytes.first)
+      end
+    end
+
     context "when a length is given" do
       it "should read partial sections of the data" do
         expect(subject.read(3)).to eq(string[0,3])
@@ -435,6 +441,12 @@ describe FakeIO do
   describe "#to_io" do
     it "must return self" do
       expect(subject.to_io).to be(subject)
+    end
+  end
+
+  describe "#inspect" do
+    it "must return TestIO object string" do
+      expect(subject.inspect).to eq("#<TestIO: 3>")
     end
   end
 
