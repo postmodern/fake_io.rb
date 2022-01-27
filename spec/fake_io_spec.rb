@@ -438,6 +438,36 @@ describe FakeIO do
     end
   end
 
+  describe "#write" do
+    let(:data) { "foo" }
+
+    it "must call #io_write with the data" do
+      expect(subject).to receive(:io_write).with(data)
+
+      subject.write(data)
+    end
+
+    context "when the given data is not a String" do
+      let(:data) { :foo }
+
+      it "must convert the data to a String before calling #io_write" do
+        expect(subject).to receive(:io_write).with(data.to_s)
+
+        subject.write(data)
+      end
+    end
+
+    context "when the object is not opened for writing" do
+      before { subject.close_write }
+
+      it do
+        expect {
+          subject.write(data)
+        }.to raise_error(IOError,"closed for writing")
+      end
+    end
+  end
+
   describe "#to_io" do
     it "must return self" do
       expect(subject.to_io).to be(subject)
