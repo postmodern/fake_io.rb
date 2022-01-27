@@ -52,6 +52,10 @@ describe FakeIO do
     it "must default #sync to false" do
       expect(subject.sync).to be(false)
     end
+
+    it "must default #external_encoding to Encoding.default_external" do
+      expect(subject.external_encoding).to eq(Encoding.default_external)
+    end
   end
 
   describe "#advise" do
@@ -146,12 +150,40 @@ describe FakeIO do
     it "should read each block of data" do
       expect(subject.each_chunk.to_a).to eq(chunks)
     end
+
+    it "must set the encoding of the String to Encoding.default_external" do
+      expect(subject.each_chunk.first.encoding).to eq(Encoding.default_external)
+    end
+
+    context "when #external_encoding diffs from Encoding.default_external" do
+      let(:external_encoding) { Encoding::ASCII_8BIT }
+
+      before { subject.external_encoding = external_encoding }
+
+      it "must set the encoding of the String to #external_encoding" do
+        expect(subject.each_chunk.first.encoding).to eq(subject.external_encoding)
+      end
+    end
   end
 
   describe "#read" do
     context "when no length is given" do
       it "should read all of the data" do
         expect(subject.read).to eq(string)
+      end
+
+      it "must set the encoding of the String to Encoding.default_external" do
+        expect(subject.read.encoding).to eq(Encoding.default_external)
+      end
+
+      context "when #external_encoding diffs from Encoding.default_external" do
+        let(:external_encoding) { Encoding::ASCII_8BIT }
+
+        before { subject.external_encoding = external_encoding }
+
+        it "must set the encoding of the String to #external_encoding" do
+          expect(subject.read.encoding).to eq(subject.external_encoding)
+        end
       end
 
       context "and when a buffer is also given" do
@@ -203,6 +235,20 @@ describe FakeIO do
       expect(subject.readpartial(length).length).to eq(length)
     end
 
+    it "must set the encoding of the String to Encoding.default_external" do
+      expect(subject.readpartial(length).encoding).to eq(Encoding.default_external)
+    end
+
+    context "when #external_encoding diffs from Encoding.default_external" do
+      let(:external_encoding) { Encoding::ASCII_8BIT }
+
+      before { subject.external_encoding = external_encoding }
+
+      it "must set the encoding of the String to #external_encoding" do
+        expect(subject.readpartial(length).encoding).to eq(subject.external_encoding)
+      end
+    end
+
     context "when also given a buffer" do
       let(:buffer) { String.new }
 
@@ -219,6 +265,20 @@ describe FakeIO do
     it "should get a line" do
       expect(subject.gets).to eq(lines.first)
     end
+
+    it "must set the encoding of the String to Encoding.default_external" do
+      expect(subject.gets.encoding).to eq(Encoding.default_external)
+    end
+
+    context "when #external_encoding diffs from Encoding.default_external" do
+      let(:external_encoding) { Encoding::ASCII_8BIT }
+
+      before { subject.external_encoding = external_encoding }
+
+      it "must set the encoding of the String to #external_encoding" do
+        expect(subject.gets.encoding).to eq(subject.external_encoding)
+      end
+    end
   end
 
   describe "#readbyte" do
@@ -231,11 +291,39 @@ describe FakeIO do
     it "should get a character" do
       expect(subject.getc).to eq(chars.first)
     end
+
+    it "must set the encoding of the String to Encoding.default_external" do
+      expect(subject.getc.encoding).to eq(Encoding.default_external)
+    end
+
+    context "when #external_encoding diffs from Encoding.default_external" do
+      let(:external_encoding) { Encoding::ASCII_8BIT }
+
+      before { subject.external_encoding = external_encoding }
+
+      it "must set the encoding of the String to #external_encoding" do
+        expect(subject.getc.encoding).to eq(subject.external_encoding)
+      end
+    end
   end
 
   describe "#readchar" do
     it "should read a char" do
       expect(subject.readchar).to eq(chars.first)
+    end
+
+    it "must set the encoding of the String to Encoding.default_external" do
+      expect(subject.readchar.encoding).to eq(Encoding.default_external)
+    end
+
+    context "when #external_encoding diffs from Encoding.default_external" do
+      let(:external_encoding) { Encoding::ASCII_8BIT }
+
+      before { subject.external_encoding = external_encoding }
+
+      it "must set the encoding of the String to #external_encoding" do
+        expect(subject.readchar.encoding).to eq(subject.external_encoding)
+      end
     end
   end
 
@@ -252,11 +340,39 @@ describe FakeIO do
     it "should read a line" do
       expect(subject.readline).to eq(lines.first)
     end
+
+    it "must set the encoding of the String to Encoding.default_external" do
+      expect(subject.readline.encoding).to eq(Encoding.default_external)
+    end
+
+    context "when #external_encoding diffs from Encoding.default_external" do
+      let(:external_encoding) { Encoding::ASCII_8BIT }
+
+      before { subject.external_encoding = external_encoding }
+
+      it "must set the encoding of the String to #external_encoding" do
+        expect(subject.readline.encoding).to eq(subject.external_encoding)
+      end
+    end
   end
 
   describe "#readlines" do
     it "should read all lines" do
       expect(subject.readlines).to eq(lines)
+    end
+
+    it "must set the encoding of the String to Encoding.default_external" do
+      expect(subject.readlines.map(&:encoding)).to all(eq(Encoding.default_external))
+    end
+
+    context "when #external_encoding diffs from Encoding.default_external" do
+      let(:external_encoding) { Encoding::ASCII_8BIT }
+
+      before { subject.external_encoding = external_encoding }
+
+      it "must set the encoding of the String to #external_encoding" do
+        expect(subject.readlines.map(&:encoding)).to all(eq(subject.external_encoding))
+      end
     end
   end
 
@@ -280,11 +396,39 @@ describe FakeIO do
         expect(subject.each_char.to_a).to eq(chars)
       end
     end
+
+    it "must set the encoding of the String to Encoding.default_external" do
+      expect(subject.each_char.map(&:encoding)).to all(eq(Encoding.default_external))
+    end
+
+    context "when #external_encoding diffs from Encoding.default_external" do
+      let(:external_encoding) { Encoding::ASCII_8BIT }
+
+      before { subject.external_encoding = external_encoding }
+
+      it "must set the encoding of the String to #external_encoding" do
+        expect(subject.each_char.map(&:encoding)).to all(eq(subject.external_encoding))
+      end
+    end
   end
 
   describe "#each_line" do
     it "should read each line of data" do
       expect(subject.each_line.to_a).to eq(lines)
+    end
+
+    it "must set the encoding of the String to Encoding.default_external" do
+      expect(subject.each_line.map(&:encoding)).to all(eq(Encoding.default_external))
+    end
+
+    context "when #external_encoding diffs from Encoding.default_external" do
+      let(:external_encoding) { Encoding::ASCII_8BIT }
+
+      before { subject.external_encoding = external_encoding }
+
+      it "must set the encoding of the String to #external_encoding" do
+        expect(subject.each_line.map(&:encoding)).to all(eq(subject.external_encoding))
+      end
     end
   end
 

@@ -24,6 +24,11 @@ module FakeIO
 
   alias eof? eof
 
+  # The external encoding to convert all read data into.
+  #
+  # @return [Encoding]
+  attr_accessor :external_encoding
+
   #
   # Initializes the IO stream.
   #
@@ -37,6 +42,8 @@ module FakeIO
 
     @binmode = false
     @tty     = false
+
+    @external_encoding = Encoding.default_external
 
     @sync = false
 
@@ -104,6 +111,8 @@ module FakeIO
         break
       end
 
+      chunk.encode!(external_encoding)
+
       unless chunk.empty?
         @pos += chunk.bytesize
         yield chunk
@@ -129,7 +138,7 @@ module FakeIO
   #
   def read(length=nil,buffer=nil)
     bytes_remaining = (length || Float::INFINITY)
-    result = String.new
+    result = String.new(encoding: external_encoding)
 
     each_chunk do |chunk|
       if bytes_remaining < chunk.bytesize
@@ -256,7 +265,7 @@ module FakeIO
     # if no separator is given, read everything
     return read if separator.nil?
 
-    line = String.new
+    line = String.new(encoding: external_encoding)
 
     while (c = read(1))
       line << c
@@ -1042,7 +1051,7 @@ module FakeIO
   #   The data to prepend.
   #
   def prepend_buffer(data)
-    @buffer ||= String.new
+    @buffer ||= String.new(encoding: external_encoding)
     @buffer.insert(0,data)
   end
 
@@ -1055,7 +1064,7 @@ module FakeIO
   def append_buffer(data)
     @pos -= data.bytesize
 
-    @buffer ||= String.new
+    @buffer ||= String.new(encoding: external_encoding)
     @buffer << data
   end
 
