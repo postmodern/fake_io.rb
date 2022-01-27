@@ -500,7 +500,7 @@ module FakeIO
       raise(IOError,"closed for writing")
     end
 
-    io_write(data.to_s) if @write
+    io_write(data.to_s)
   end
 
   alias syswrite write
