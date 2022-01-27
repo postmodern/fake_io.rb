@@ -445,8 +445,10 @@ describe FakeIO do
   end
 
   describe "#inspect" do
-    it "must return TestIO object string" do
-      expect(subject.inspect).to eq("#<TestIO: 3>")
+    let(:fd) { subject.instance_variable_get('@fd') }
+
+    it "must return the inspected object as a string, including the @fd" do
+      expect(subject.inspect).to eq("#<#{subject.class}: #{fd}>")
     end
   end
 
