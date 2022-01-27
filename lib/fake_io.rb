@@ -29,6 +29,11 @@ module FakeIO
   # @return [Encoding]
   attr_accessor :external_encoding
 
+  # The internal encoding to convert all internal data to.
+  #
+  # @return [Encoding, nil]
+  attr_accessor :internal_encoding
+
   #
   # Initializes the IO stream.
   #
@@ -44,6 +49,7 @@ module FakeIO
     @tty     = false
 
     @external_encoding = Encoding.default_external
+    @internal_encoding = Encoding.default_internal
 
     @sync = false
 
@@ -111,6 +117,7 @@ module FakeIO
         break
       end
 
+      chunk.encode!(internal_encoding) if internal_encoding
       chunk.encode!(external_encoding)
 
       unless chunk.empty?
@@ -500,7 +507,10 @@ module FakeIO
       raise(IOError,"closed for writing")
     end
 
-    io_write(data.to_s)
+    data = data.to_s
+    data = data.encode(internal_encoding) if internal_encoding
+
+    io_write(data)
   end
 
   alias syswrite write
@@ -1051,7 +1061,7 @@ module FakeIO
   #   The data to prepend.
   #
   def prepend_buffer(data)
-    @buffer ||= String.new(encoding: external_encoding)
+    @buffer ||= String.new(encoding: internal_encoding)
     @buffer.insert(0,data)
   end
 
@@ -1064,7 +1074,7 @@ module FakeIO
   def append_buffer(data)
     @pos -= data.bytesize
 
-    @buffer ||= String.new(encoding: external_encoding)
+    @buffer ||= String.new(encoding: internal_encoding)
     @buffer << data
   end
 

@@ -457,6 +457,20 @@ describe FakeIO do
       end
     end
 
+    context "when #internal_encoding is not nil" do
+      let(:internal_encoding) { Encoding::ASCII_8BIT }
+      let(:encoded_data)      { data.encode(internal_encoding) }
+
+      before { subject.internal_encoding = internal_encoding }
+
+      it "it must convert the given data to #internal_encoding before calling #io_write" do
+        expect(data).to receive(:encode).with(internal_encoding).and_return(encoded_data)
+        expect(subject).to receive(:io_write).with(encoded_data)
+
+        subject.write(data)
+      end
+    end
+
     context "when the object is not opened for writing" do
       before { subject.close_write }
 
