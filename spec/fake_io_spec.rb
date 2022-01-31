@@ -146,6 +146,108 @@ describe FakeIO do
     end
   end
 
+  describe "#set_encoding" do
+    context "when given a single String" do
+      let(:string) { 'ASCII' }
+
+      before { subject.set_encoding(string) }
+
+      it "must set the #external_encoding" do
+        expect(subject.external_encoding).to eq(Encoding.find(string))
+      end
+
+      it "must not set the #internal_encoding" do
+        expect(subject.internal_encoding).to be(nil)
+      end
+
+      context "and the String contains a ':'" do
+        let(:ext_enc) { 'UTF-8' }
+        let(:int_enc) { 'ASCII' }
+        let(:string)  { "#{ext_enc}:#{int_enc}" }
+
+        it "must set the #external_encoding" do
+          expect(subject.external_encoding).to eq(Encoding.find(ext_enc))
+        end
+
+        it "must set the #internal_encoding" do
+          expect(subject.internal_encoding).to eq(Encoding.find(int_enc))
+        end
+      end
+
+      context "and the String contains a ','" do
+        let(:ext_enc) { 'UTF-8' }
+        let(:int_enc) { 'ASCII' }
+        let(:string)  { "#{ext_enc},#{int_enc}" }
+
+        it "must set the #external_encoding" do
+          expect(subject.external_encoding).to eq(Encoding.find(ext_enc))
+        end
+
+        it "must set the #internal_encoding" do
+          expect(subject.internal_encoding).to eq(Encoding.find(int_enc))
+        end
+      end
+    end
+
+    context "when given a single Encoding object" do
+      let(:encoding) { Encoding::ASCII }
+
+      before { subject.set_encoding(encoding) }
+
+      it "must set the #external_encoding" do
+        expect(subject.external_encoding).to eq(encoding)
+      end
+
+      it "must not set the #internal_encoding" do
+        expect(subject.internal_encoding).to be(nil)
+      end
+    end
+
+    context "when given two Encoding objects" do
+      let(:external_encoding) { Encoding::UTF_8 }
+      let(:internal_encoding) { Encoding::ASCII }
+
+      before { subject.set_encoding(external_encoding,internal_encoding) }
+
+      it "must set the #external_encoding" do
+        expect(subject.external_encoding).to eq(external_encoding)
+      end
+
+      it "must set the #internal_encoding" do
+        expect(subject.internal_encoding).to eq(internal_encoding)
+      end
+    end
+
+    context "when given another Object besides a String or an Encoding" do
+      it do
+        expect {
+          subject.set_encoding(Object.new)
+        }.to raise_error(TypeError,"argument must be a String or Encoding object")
+      end
+    end
+
+    context "when no arguments are given" do
+      it do
+        expect {
+          subject.set_encoding
+        }.to raise_error(ArgumentError,"wrong number of arguments (given 0, expected 1..3)")
+      end
+    end
+
+    context "when given more than three arguments" do
+      it do
+        expect {
+          subject.set_encoding(
+            Encoding::ASCII,
+            Encoding::ASCII,
+            Encoding::ASCII,
+            Encoding::ASCII
+          )
+        }.to raise_error(ArgumentError,"wrong number of arguments (given 4, expected 1..3)")
+      end
+    end
+  end
+
   describe "#each_chunk" do
     it "should read each block of data" do
       expect(subject.each_chunk.to_a).to eq(chunks)

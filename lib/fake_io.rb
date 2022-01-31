@@ -131,6 +131,56 @@ module FakeIO
   end
 
   #
+  # Sets the encoding.
+  #
+  # @param [Array] arguments
+  #
+  # @overload set_encoding(encoding)
+  #   @param [String] encoding
+  #     The encoding string, which can be the encoding name or the external
+  #     and internal encoding names separated by a `:` or `,` character.
+  #
+  # @overload set_encoding(ext_inc,int_enc)
+  #   @param [Encoding] ext_inc
+  #     The new external encoding.
+  #
+  #   @param [Encoding] int_enc
+  #     The new internal encoding.
+  #
+  # @raise [TypeError]
+  #   The given argument was not a String or Encoding object.
+  #
+  # @raise [ArgumentError]
+  #   Either no arguments were given or more than three arguments were given.
+  #
+  def set_encoding(*arguments)
+    if arguments.length == 1
+      case arguments[0]
+      when String
+        string = arguments[0]
+
+        if string.include?(':') || string.include?(',')
+          ext_enc, int_enc = string.split(/[:,]\s*/,2)
+
+          self.external_encoding = Encoding.find(ext_enc)
+          self.internal_encoding = Encoding.find(int_enc)
+        else
+          self.external_encoding = Encoding.find(string)
+        end
+      when Encoding
+        self.external_encoding = arguments[0]
+      else
+        raise(TypeError,"argument must be a String or Encoding object")
+      end
+    elsif arguments.length == 2 || arguments.length == 3
+      self.external_encoding = arguments[0]
+      self.internal_encoding = arguments[1]
+    else
+      raise(ArgumentError,"wrong number of arguments (given #{arguments.length}, expected 1..3)")
+    end
+  end
+
+  #
   # Reads data from the IO stream.
   #
   # @param [Integer, nil] length
