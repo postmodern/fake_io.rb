@@ -19,6 +19,8 @@ module FakeIO
   # The position within the IO stream
   attr_reader :pos
 
+  alias tell pos
+
   # The end-of-file indicator
   attr_reader :eof
 
@@ -78,8 +80,6 @@ module FakeIO
   def advise(advice,offset=0,len=0)
     # no-op
   end
-
-  alias tell pos
 
   #
   # Iterates over each block within the IO stream.
