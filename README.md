@@ -21,7 +21,7 @@
 
 ## Requirements
 
-* [Ruby] >= 1.9.1
+* [Ruby] >= 2.0.0
 
 [Ruby]: https://www.ruby-lang.org/
 
