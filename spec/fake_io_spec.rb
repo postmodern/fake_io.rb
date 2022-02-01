@@ -795,9 +795,18 @@ describe FakeIO do
       end
     end
 
+    it "must set #eof to true at the end" do
+      expect(subject.eof).to be(false)
+
+      subject.each_chunk { |chunk| }
+
+      expect(subject.eof).to be(true)
+    end
+
     context "when #io_read raises an EOFError" do
       it "must set #eof to true" do
         allow(subject).to receive(:io_read).and_raise(EOFError)
+        expect(subject.eof).to be(false)
 
         subject.each_chunk { |chunk| }
 
