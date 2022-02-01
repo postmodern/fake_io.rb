@@ -82,59 +82,6 @@ module FakeIO
   end
 
   #
-  # Iterates over each block within the IO stream.
-  #
-  # @yield [block]
-  #   The given block will be passed each block of data from the IO
-  #   stream.
-  #
-  # @yieldparam [String] block
-  #   A block of data from the IO stream.
-  #
-  # @return [Enumerator]
-  #   If no block is given, an enumerator object will be returned.
-  #
-  # @raise [IOError]
-  #   The stream is closed for reading.
-  #
-  def each_chunk
-    return enum_for(__method__) unless block_given?
-
-    unless @read
-      raise(IOError,"closed for reading")
-    end
-
-    unless empty_buffer?
-      # read from the buffer first
-      chunk = read_buffer
-      chunk.force_encoding(external_encoding)
-
-      yield chunk
-    end
-
-    until @eof
-      begin
-        # no data currently available, sleep and retry
-        until (chunk = io_read)
-          sleep(1)
-        end
-      rescue EOFError
-        break
-      end
-
-      chunk.force_encoding(internal_encoding) if internal_encoding
-      chunk.force_encoding(external_encoding)
-
-      unless chunk.empty?
-        yield chunk
-      else
-        # short read
-        @eof = true
-      end
-    end
-  end
-
-  #
   # Sets the encoding.
   #
   # @param [Array] arguments
@@ -247,6 +194,59 @@ module FakeIO
       end
     else
       ungetbyte(b1) if b1
+    end
+  end
+
+  #
+  # Iterates over each block within the IO stream.
+  #
+  # @yield [block]
+  #   The given block will be passed each block of data from the IO
+  #   stream.
+  #
+  # @yieldparam [String] block
+  #   A block of data from the IO stream.
+  #
+  # @return [Enumerator]
+  #   If no block is given, an enumerator object will be returned.
+  #
+  # @raise [IOError]
+  #   The stream is closed for reading.
+  #
+  def each_chunk
+    return enum_for(__method__) unless block_given?
+
+    unless @read
+      raise(IOError,"closed for reading")
+    end
+
+    unless empty_buffer?
+      # read from the buffer first
+      chunk = read_buffer
+      chunk.force_encoding(external_encoding)
+
+      yield chunk
+    end
+
+    until @eof
+      begin
+        # no data currently available, sleep and retry
+        until (chunk = io_read)
+          sleep(1)
+        end
+      rescue EOFError
+        break
+      end
+
+      chunk.force_encoding(internal_encoding) if internal_encoding
+      chunk.force_encoding(external_encoding)
+
+      unless chunk.empty?
+        yield chunk
+      else
+        # short read
+        @eof = true
+      end
     end
   end
 
