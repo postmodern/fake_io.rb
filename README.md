@@ -13,7 +13,7 @@
 
 ## Features
 
-* Supports (almost) all of the Ruby 2.x and 3.x [IO] methods.
+* Supports all of the Ruby 2.x and 3.x [IO] instance methods.
 * Emulates buffered I/O.
 * UTF-8 aware.
 * Can be included into any Class.
