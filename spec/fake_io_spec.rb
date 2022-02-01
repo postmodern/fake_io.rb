@@ -806,6 +806,13 @@ describe FakeIO do
         expect(subject.read.encoding).to eq(Encoding.default_external)
       end
 
+      it "must advance #pos by the number of bytes read" do
+        previous_pos = subject.pos
+        read_data    = subject.read
+
+        expect(subject.pos - previous_pos).to eq(read_data.bytesize)
+      end
+
       context "when #external_encoding diffs from Encoding.default_external" do
         let(:external_encoding) { Encoding::ASCII_8BIT }
 
@@ -841,6 +848,14 @@ describe FakeIO do
 
       it "should read individual blocks of data" do
         expect(subject.read(4)).to eq(string[0,4])
+      end
+
+      it "must advance #pos by the number of bytes read" do
+        previous_pos = subject.pos
+        length       = 4
+        read_data    = subject.read(length)
+
+        expect(subject.pos - previous_pos).to eq(length)
       end
 
       context "but the data is UTF-8" do
@@ -969,6 +984,16 @@ describe FakeIO do
       data.each_char.reverse_each { |c| subject.ungetc(c) }
 
       expect(subject.read(4)).to eq(data)
+    end
+
+    it "must decrement #pos" do
+      data         = subject.read(4)
+      previous_pos = subject.pos
+      char         = data.chars.last
+
+      subject.ungetc(char)
+
+      expect(previous_pos - subject.pos).to eq(char.bytesize)
     end
   end
 

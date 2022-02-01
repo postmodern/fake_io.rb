@@ -126,7 +126,6 @@ module FakeIO
       chunk.force_encoding(external_encoding)
 
       unless chunk.empty?
-        @pos += chunk.bytesize
         yield chunk
       else
         # short read
@@ -277,10 +276,13 @@ module FakeIO
 
         result << fragment
         append_buffer(remaining_data)
+        @pos += bytes_remaining
         break
       else
         result << chunk
-        bytes_remaining -= chunk.bytesize
+        bytes_read = chunk.bytesize
+        bytes_remaining -= bytes_read
+        @pos += bytes_read
       end
 
       # no more data to read
@@ -358,6 +360,7 @@ module FakeIO
            end
 
     prepend_buffer(char)
+    @pos -= char.bytesize
     return nil
   end
 
@@ -372,7 +375,10 @@ module FakeIO
   #   The character was appended to the read buffer.
   #
   def ungetc(char)
-    prepend_buffer(char.to_s)
+    char = char.to_s
+
+    prepend_buffer(char)
+    @pos -= char.bytesize
     return nil
   end
 
@@ -1169,8 +1175,6 @@ module FakeIO
   #
   def read_buffer
     chunk = @buffer
-    @pos += @buffer.bytesize
-
     clear_buffer!
     return chunk
   end
@@ -1197,8 +1201,6 @@ module FakeIO
   #   The data to append.
   #
   def append_buffer(data)
-    @pos -= data.bytesize
-
     @buffer ||= if internal_encoding
                   String.new(encoding: internal_encoding)
                 else
