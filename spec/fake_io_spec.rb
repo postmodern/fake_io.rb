@@ -834,12 +834,6 @@ describe FakeIO do
       end
     end
 
-    describe "#getbyte" do
-      it "should get byte" do
-        expect(subject.getbyte).to eq(bytes.first)
-      end
-    end
-
     context "when a length is given" do
       it "should read partial sections of the data" do
         expect(subject.read(3)).to eq(string[0,3])
@@ -909,6 +903,12 @@ describe FakeIO do
 
         expect(buffer).to eq(string[0,length * 2])
       end
+    end
+  end
+
+  describe "#getbyte" do
+    it "should get byte" do
+      expect(subject.getbyte).to eq(bytes.first)
     end
   end
 
