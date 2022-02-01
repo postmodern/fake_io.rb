@@ -5,7 +5,7 @@
 
 * [Source](https://github.com/postmodern/fake_io.rb)
 * [Issues](https://github.com/postmodern/fake_io.rb/issues)
-* [Documentation](https://rubydoc.info/gems/fake_io/frames)
+* [Documentation](https://rubydoc.info/gems/fake_io)
 
 ## Description
 
