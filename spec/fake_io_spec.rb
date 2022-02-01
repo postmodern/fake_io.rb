@@ -290,7 +290,7 @@ describe FakeIO do
             end
 
             it "must consume the BOM bytes" do
-              expect(subject.read).to eq(data[4..].force_encoding(encoding))
+              expect(subject.read).to eq(data.byteslice(4..).force_encoding(encoding))
             end
           end
 
@@ -395,7 +395,7 @@ describe FakeIO do
           it "must consume the BOM bytes" do
             pending "Cannot convert from UTF-8 to UTF-7"
 
-            expect(subject.read).to eq(data[2..].force_encoding(encoding))
+            expect(subject.read).to eq(data.byteslice(2..).force_encoding(encoding))
           end
         end
 
@@ -473,7 +473,7 @@ describe FakeIO do
           end
 
           it "must consume the BOM bytes" do
-            expect(subject.read).to eq(data.force_encoding(Encoding::ASCII_8BIT)[3..])
+            expect(subject.read).to eq(data.byteslice(3..).force_encoding(encoding))
           end
         end
 
@@ -550,7 +550,7 @@ describe FakeIO do
         end
 
         it "must consume the BOM bytes" do
-          expect(subject.read).to eq(data[2..].force_encoding(encoding))
+          expect(subject.read).to eq(data.byteslice(2..).force_encoding(encoding))
         end
       end
 
@@ -610,7 +610,7 @@ describe FakeIO do
         end
 
         it "must consume the BOM bytes" do
-          expect(subject.read).to eq(data[2..].force_encoding(encoding))
+          expect(subject.read).to eq(data.byteslice(2..).force_encoding(encoding))
         end
       end
 
