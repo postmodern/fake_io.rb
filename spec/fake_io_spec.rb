@@ -473,7 +473,7 @@ describe FakeIO do
           end
 
           it "must consume the BOM bytes" do
-            expect(subject.read).to eq(data[3..])
+            expect(subject.read).to eq(data.force_encoding(Encoding::ASCII_8BIT)[3..])
           end
         end
 
