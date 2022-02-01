@@ -248,6 +248,534 @@ describe FakeIO do
     end
   end
 
+  describe "#set_encoding_by_bom" do
+    class TestBOM
+
+      include FakeIO
+
+      def initialize(data)
+        @data = data
+        super()
+      end
+
+      private
+
+      def io_read
+        if (data = @data)
+          @data = nil
+          return data
+        else
+          raise(EOFError,"end of stream")
+        end
+      end
+
+    end
+
+    subject { TestBOM.new(data) }
+
+    before { subject.set_encoding_by_bom }
+
+    context "when the first byte is 0x00" do
+      context "and the second byte is 0x00" do
+        context "and the thrid byte is 0xFE" do
+          context "and the fourth byte is 0xFF" do
+            let(:data) do
+              "\x00\x00\xFE\xFFhello".force_encoding(Encoding::ASCII_8BIT)
+            end
+
+            let(:encoding) { Encoding::UTF_32BE }
+
+            it "must set #external_encoding to Encoding::UTF_32BE" do
+              expect(subject.external_encoding).to eq(encoding)
+            end
+
+            it "must consume the BOM bytes" do
+              expect(subject.read).to eq(
+                data.byteslice(4..).force_encoding(encoding)
+              )
+            end
+          end
+
+          context "but the fourth byte is not 0xFF" do
+            let(:data) do
+              "\x00\x00\xFEXhello".force_encoding(Encoding::ASCII_8BIT)
+            end
+
+            it "must not set #external_encoding" do
+              expect(subject.external_encoding).to be(
+                Encoding.default_external
+              )
+            end
+
+            it "must put the bytes back into the read buffer" do
+              expect(subject.read).to eq(
+                data.force_encoding(subject.external_encoding)
+              )
+            end
+          end
+
+          context "but EOF is reached" do
+            let(:data) do
+              "\x00\x00\xFE".force_encoding(Encoding::ASCII_8BIT)
+            end
+
+            it "must not set #external_encoding" do
+              expect(subject.external_encoding).to be(
+                Encoding.default_external
+              )
+            end
+
+            it "must put the bytes back into the read buffer" do
+              expect(subject.read).to eq(
+                data.force_encoding(subject.external_encoding)
+              )
+            end
+          end
+        end
+
+        context "but the third byte is not 0xFE" do
+          let(:data) do
+            "\x00\x00XXhello".force_encoding(Encoding::ASCII_8BIT)
+          end
+
+          it "must not set #external_encoding" do
+            expect(subject.external_encoding).to be(Encoding.default_external)
+          end
+
+          it "must put the bytes back into the read buffer" do
+            expect(subject.read).to eq(
+              data.force_encoding(subject.external_encoding)
+            )
+          end
+        end
+
+        context "but EOF is reached" do
+          let(:data) do
+            "\x00\x00".force_encoding(Encoding::ASCII_8BIT)
+          end
+
+          it "must not set #external_encoding" do
+            expect(subject.external_encoding).to be(Encoding.default_external)
+          end
+
+          it "must put the bytes back into the read buffer" do
+            expect(subject.read).to eq(
+              data.force_encoding(subject.external_encoding)
+            )
+          end
+        end
+      end
+
+      context "but the second byte is not 0x00" do
+        let(:data) do
+          "\x00XXXhello".force_encoding(Encoding::ASCII_8BIT)
+        end
+
+        it "must not set #external_encoding" do
+          expect(subject.external_encoding).to be(Encoding.default_external)
+        end
+
+        it "must put the bytes back into the read buffer" do
+          expect(subject.read).to eq(
+            data.force_encoding(subject.external_encoding)
+          )
+        end
+      end
+
+      context "but EOF is reached" do
+        let(:data) do
+          "\x00".force_encoding(Encoding::ASCII_8BIT)
+        end
+
+        it "must not set #external_encoding" do
+          expect(subject.external_encoding).to be(Encoding.default_external)
+        end
+
+        it "must put the bytes back into the read buffer" do
+          expect(subject.read).to eq(
+            data.force_encoding(subject.external_encoding)
+          )
+        end
+      end
+    end
+
+    context "but the first byte is not 0x00" do
+      let(:data) do
+        "XXXXhello".force_encoding(Encoding::ASCII_8BIT)
+      end
+
+      it "must not set #external_encoding" do
+        expect(subject.external_encoding).to be(Encoding.default_external)
+      end
+
+      it "must put the bytes back into the read buffer" do
+        expect(subject.read).to eq(
+          data.force_encoding(subject.external_encoding)
+        )
+      end
+    end
+
+    context "when the first byte is 0x28" do
+      context "and the second byte is 0x2F" do
+        context "and the third byte is 0x76" do
+          let(:data) do
+            "\x28\x2F\x76hello".force_encoding(Encoding::ASCII_8BIT)
+          end
+
+          let(:encoding) { Encoding::UTF_7 }
+
+          it "must set #external_encoding to Encoding::UTF_7" do
+            expect(subject.external_encoding).to eq(encoding)
+          end
+
+          it "must consume the BOM bytes" do
+            pending "Cannot convert from UTF-8 to UTF-7"
+
+            expect(subject.read).to eq(
+              data.byteslice(2..).force_encoding(encoding)
+            )
+          end
+        end
+
+        context "but the third byte is not 0x76" do
+          let(:data) do
+            "\x28\x2FXhello".force_encoding(Encoding::ASCII_8BIT)
+          end
+
+          it "must not set #external_encoding" do
+            expect(subject.external_encoding).to be(Encoding.default_external)
+          end
+
+          it "must put the bytes back into the read buffer" do
+            expect(subject.read).to eq(
+              data.force_encoding(subject.external_encoding)
+            )
+          end
+        end
+
+        context "but EOF is reached" do
+          let(:data) do
+            "\x28\x2F".force_encoding(Encoding::ASCII_8BIT)
+          end
+
+          it "must not set #external_encoding" do
+            expect(subject.external_encoding).to be(Encoding.default_external)
+          end
+
+          it "must put the bytes back into the read buffer" do
+            expect(subject.read).to eq(
+              data.force_encoding(subject.external_encoding)
+            )
+          end
+        end
+      end
+
+      context "but the second byte is not 0x2F" do
+        let(:data) do
+          "\x28XXhello".force_encoding(Encoding::ASCII_8BIT)
+        end
+
+        it "must not set #external_encoding" do
+          expect(subject.external_encoding).to be(Encoding.default_external)
+        end
+
+        it "must put the bytes back into the read buffer" do
+          expect(subject.read).to eq(
+            data.force_encoding(subject.external_encoding)
+          )
+        end
+      end
+
+      context "but EOF is reached" do
+        let(:data) do
+          "\x28".force_encoding(Encoding::ASCII_8BIT)
+        end
+
+        it "must not set #external_encoding" do
+          expect(subject.external_encoding).to be(Encoding.default_external)
+        end
+
+        it "must put the bytes back into the read buffer" do
+          expect(subject.read).to eq(
+            data.force_encoding(subject.external_encoding)
+          )
+        end
+      end
+    end
+
+    context "but the first byte is not 0x2F" do
+      let(:data) do
+        "XXXhello".force_encoding(Encoding::ASCII_8BIT)
+      end
+
+      it "must not set #external_encoding" do
+        expect(subject.external_encoding).to be(Encoding.default_external)
+      end
+
+      it "must put the bytes back into the read buffer" do
+        expect(subject.read).to eq(
+          data.force_encoding(subject.external_encoding)
+        )
+      end
+    end
+
+    context "when the first byte is 0xEF" do
+      context "and the second byte is 0xBB" do
+        context "and the third byte is 0xBF" do
+          let(:data) do
+            "\xEF\xBB\xBFhello".force_encoding(Encoding::ASCII_8BIT)
+          end
+
+          let(:encoding) { Encoding::UTF_8 }
+
+          it "must set #external_encoding to Encoding::UTF_8" do
+            expect(subject.external_encoding).to eq(encoding)
+          end
+
+          it "must consume the BOM bytes" do
+            expect(subject.read).to eq(
+              data.byteslice(3..).force_encoding(encoding)
+            )
+          end
+        end
+
+        context "but the third byte is not 0xBF" do
+          let(:data) do
+            "\xEF\xBBXhello".force_encoding(Encoding::ASCII_8BIT)
+          end
+
+          it "must not set #external_encoding" do
+            expect(subject.external_encoding).to be(Encoding.default_external)
+          end
+
+          it "must put the bytes back into the read buffer" do
+            expect(subject.read).to eq(
+              data.force_encoding(subject.external_encoding)
+            )
+          end
+        end
+
+        context "but EOF is reached" do
+          let(:data) do
+            "\xEF\xBB".force_encoding(Encoding::ASCII_8BIT)
+          end
+
+          it "must not set #external_encoding" do
+            expect(subject.external_encoding).to be(Encoding.default_external)
+          end
+
+          it "must put the bytes back into the read buffer" do
+            expect(subject.read).to eq(
+              data.force_encoding(subject.external_encoding)
+            )
+          end
+        end
+      end
+
+      context "but the second byte is not 0xBB" do
+        let(:data) do
+          "\xEFXXhello".force_encoding(Encoding::ASCII_8BIT)
+        end
+
+        it "must not set #external_encoding" do
+          expect(subject.external_encoding).to be(Encoding.default_external)
+        end
+
+        it "must put the bytes back into the read buffer" do
+          expect(subject.read).to eq(
+            data.force_encoding(subject.external_encoding)
+          )
+        end
+      end
+
+      context "but EOF is reached" do
+        let(:data) do
+          "\xEF".force_encoding(Encoding::ASCII_8BIT)
+        end
+
+        it "must not set #external_encoding" do
+          expect(subject.external_encoding).to be(Encoding.default_external)
+        end
+
+        it "must put the bytes back into the read buffer" do
+          expect(subject.read).to eq(
+            data.force_encoding(subject.external_encoding)
+          )
+        end
+      end
+    end
+
+    context "but the first byte is not 0xEF" do
+      let(:data) do
+        "XXXhello".force_encoding(Encoding::ASCII_8BIT)
+      end
+
+      it "must not set #external_encoding" do
+        expect(subject.external_encoding).to be(Encoding.default_external)
+      end
+
+      it "must put the bytes back into the read buffer" do
+        expect(subject.read).to eq(
+          data.force_encoding(subject.external_encoding)
+        )
+      end
+    end
+
+    context "when the first byte is 0xFE" do
+      context "and the second byte is 0xFF" do
+        let(:data) do
+          "\xFE\xFFhello".force_encoding(Encoding::ASCII_8BIT)
+        end
+
+        let(:encoding) { Encoding::UTF_16BE }
+
+        it "must set #external_encoding to Encoding::UTF_16BE" do
+          expect(subject.external_encoding).to eq(encoding)
+        end
+
+        it "must consume the BOM bytes" do
+          expect(subject.read).to eq(
+            data.byteslice(2..).force_encoding(encoding)
+          )
+        end
+      end
+
+      context "but the second byte is not 0xFF" do
+        let(:data) do
+          "\xFEXhello".force_encoding(Encoding::ASCII_8BIT)
+        end
+
+        it "must not set #external_encoding" do
+          expect(subject.external_encoding).to be(Encoding.default_external)
+        end
+
+        it "must put the bytes back into the read buffer" do
+          expect(subject.read).to eq(
+            data.force_encoding(subject.external_encoding)
+          )
+        end
+      end
+
+      context "but EOF is reached" do
+        let(:data) do
+          "\xFE".force_encoding(Encoding::ASCII_8BIT)
+        end
+
+        it "must not set #external_encoding" do
+          expect(subject.external_encoding).to be(Encoding.default_external)
+        end
+
+        it "must put the bytes back into the read buffer" do
+          expect(subject.read).to eq(
+            data.force_encoding(subject.external_encoding)
+          )
+        end
+      end
+    end
+
+    context "but the first byte is not 0xFE" do
+      let(:data) do
+        "XXhello".force_encoding(Encoding::ASCII_8BIT)
+      end
+
+      it "must not set #external_encoding" do
+        expect(subject.external_encoding).to be(Encoding.default_external)
+      end
+
+      it "must put the bytes back into the read buffer" do
+        expect(subject.read).to eq(
+          data.force_encoding(subject.external_encoding)
+        )
+      end
+    end
+
+    context "but EOF is reached" do
+      let(:data) do
+        "".force_encoding(Encoding::ASCII_8BIT)
+      end
+
+      it "must not set #external_encoding" do
+        expect(subject.external_encoding).to be(Encoding.default_external)
+      end
+    end
+
+    context "when the first byte is 0xFF" do
+      context "and the second byte is 0xFE" do
+        let(:data) do
+          "\xFF\xFEhello".force_encoding(Encoding::ASCII_8BIT)
+        end
+
+        let(:encoding) { Encoding::UTF_16LE }
+
+        it "must set #external_encoding to Encoding::UTF_16LE" do
+          expect(subject.external_encoding).to eq(encoding)
+        end
+
+        it "must consume the BOM bytes" do
+          expect(subject.read).to eq(
+            data.byteslice(2..).force_encoding(encoding)
+          )
+        end
+      end
+
+      context "but the second byte is not 0xFE" do
+        let(:data) do
+          "\xFFXhello".force_encoding(Encoding::ASCII_8BIT)
+        end
+
+        it "must not set #external_encoding" do
+          expect(subject.external_encoding).to be(Encoding.default_external)
+        end
+
+        it "must put the bytes back into the read buffer" do
+          expect(subject.read).to eq(
+            data.force_encoding(subject.external_encoding)
+          )
+        end
+      end
+
+      context "but EOF is reached" do
+        let(:data) do
+          "\xFF".force_encoding(Encoding::ASCII_8BIT)
+        end
+
+        it "must not set #external_encoding" do
+          expect(subject.external_encoding).to be(Encoding.default_external)
+        end
+
+        it "must put the bytes back into the read buffer" do
+          expect(subject.read).to eq(
+            data.force_encoding(subject.external_encoding)
+          )
+        end
+      end
+    end
+
+    context "but the first byte is not 0xFF" do
+      let(:data) do
+        "XXhello".force_encoding(Encoding::ASCII_8BIT)
+      end
+
+      it "must not set #external_encoding" do
+        expect(subject.external_encoding).to be(Encoding.default_external)
+      end
+
+      it "must put the bytes back into the read buffer" do
+        expect(subject.read).to eq(
+          data.force_encoding(subject.external_encoding)
+        )
+      end
+    end
+
+    context "but EOF is reached" do
+      let(:data) { "".force_encoding(Encoding::ASCII_8BIT) }
+
+      it "must not set #external_encoding" do
+        expect(subject.external_encoding).to be(Encoding.default_external)
+      end
+    end
+  end
+
   describe "#each_chunk" do
     it "should read each block of data" do
       expect(subject.each_chunk.to_a).to eq(chunks)
@@ -566,7 +1094,7 @@ describe FakeIO do
       before { subject.internal_encoding = internal_encoding }
 
       it "it must convert the given data to #internal_encoding before calling #io_write" do
-        expect(data).to receive(:encode).with(internal_encoding).and_return(encoded_data)
+        expect(data).to receive(:force_encoding).with(internal_encoding).and_return(encoded_data)
         expect(subject).to receive(:io_write).with(encoded_data)
 
         subject.write(data)

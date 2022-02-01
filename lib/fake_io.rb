@@ -104,8 +104,13 @@ module FakeIO
       raise(IOError,"closed for reading")
     end
 
-    # read from the buffer first
-    yield read_buffer unless empty_buffer?
+    unless empty_buffer?
+      # read from the buffer first
+      chunk = read_buffer
+      chunk.force_encoding(external_encoding)
+
+      yield chunk
+    end
 
     until @eof
       begin
@@ -117,8 +122,8 @@ module FakeIO
         break
       end
 
-      chunk.encode!(internal_encoding) if internal_encoding
-      chunk.encode!(external_encoding)
+      chunk.force_encoding(internal_encoding) if internal_encoding
+      chunk.force_encoding(external_encoding)
 
       unless chunk.empty?
         @pos += chunk.bytesize
@@ -177,6 +182,72 @@ module FakeIO
       self.internal_encoding = arguments[1]
     else
       raise(ArgumentError,"wrong number of arguments (given #{arguments.length}, expected 1..3)")
+    end
+  end
+
+  #
+  # Sets the {#external_encoding} based on the Byte Order Mark (BOM) bytes at
+  # the beginning of the file.
+  #
+  def set_encoding_by_bom
+    case (b1 = getbyte)
+    when 0x00 # possible UTF-32 (BE) 
+      b2 = getbyte
+      b3 = getbyte
+      b4 = getbyte
+
+      if (b2 == 0x00) && (b3 == 0xFE) && (b4 == 0xFF)
+        # UTF-32 (BE) BOM (0x00 0x00 0xFE 0xFF) detected
+        self.external_encoding = Encoding::UTF_32BE
+      else
+        ungetbyte(b4) if b4
+        ungetbyte(b3) if b3
+        ungetbyte(b2) if b2
+        ungetbyte(b1) if b1
+      end
+    when 0x28 # possible UTF-7
+      b2 = getbyte
+      b3 = getbyte
+
+      if (b2 == 0x2F) && (b3 == 0x76)
+        # UTF-7 BOM (0x28 0x2F 0x76) detected
+        self.external_encoding = Encoding::UTF_7
+      else
+        ungetbyte(b3) if b3
+        ungetbyte(b2) if b2
+        ungetbyte(b1) if b1
+      end
+    when 0xEF # possible UTF-8
+      b2 = getbyte
+      b3 = getbyte
+
+      if (b2 == 0xBB) && (b3 == 0xBF)
+        self.external_encoding = Encoding::UTF_8
+      else
+        ungetbyte(b3) if b3
+        ungetbyte(b2) if b2
+        ungetbyte(b1) if b1
+      end
+    when 0xFE # possible UTF-16 (BE)
+      b2 = getbyte
+
+      if (b2 == 0xFF)
+        self.external_encoding = Encoding::UTF_16BE
+      else
+        ungetbyte(b2) if b2
+        ungetbyte(b1) if b1
+      end
+    when 0xFF # possible UTF-16 (LE) or UTF-32 (LE)
+      b2 = getbyte
+
+      if (b2 == 0xFE)
+        self.external_encoding = Encoding::UTF_16LE
+      else
+        ungetbyte(b2) if b2
+        ungetbyte(b1) if b1
+      end
+    else
+      ungetbyte(b1) if b1
     end
   end
 
@@ -281,12 +352,12 @@ module FakeIO
   #   Only available on Ruby > 1.9.
   #
   def ungetbyte(byte)
-    byte = case byte
+    char = case byte
            when Integer then byte.chr
            else              byte.to_s
            end
 
-    prepend_buffer(byte)
+    prepend_buffer(char)
     return nil
   end
 
@@ -558,7 +629,7 @@ module FakeIO
     end
 
     data = data.to_s
-    data = data.encode(internal_encoding) if internal_encoding
+    data.force_encoding(internal_encoding) if internal_encoding
 
     io_write(data)
   end
@@ -1111,8 +1182,12 @@ module FakeIO
   #   The data to prepend.
   #
   def prepend_buffer(data)
-    @buffer ||= String.new(encoding: internal_encoding)
-    @buffer.insert(0,data)
+    @buffer ||= if internal_encoding
+                  String.new(encoding: internal_encoding)
+                else
+                  String.new
+                end
+    @buffer.insert(0,data.force_encoding(@buffer.encoding))
   end
 
   #
@@ -1124,8 +1199,12 @@ module FakeIO
   def append_buffer(data)
     @pos -= data.bytesize
 
-    @buffer ||= String.new(encoding: internal_encoding)
-    @buffer << data
+    @buffer ||= if internal_encoding
+                  String.new(encoding: internal_encoding)
+                else
+                  String.new
+                end
+    @buffer << data.force_encoding(@buffer.encoding)
   end
 
 end
