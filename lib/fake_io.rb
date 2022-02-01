@@ -220,9 +220,9 @@ module FakeIO
       raise(IOError,"closed for reading")
     end
 
-    unless empty_buffer?
+    unless io_buffer_empty?
       # read from the buffer first
-      chunk = read_buffer
+      chunk = io_buffer_read
       chunk.force_encoding(external_encoding)
 
       yield chunk
@@ -276,7 +276,7 @@ module FakeIO
         remaining_data   = chunk.byteslice(bytes_remaining,remaining_length)
 
         result << fragment
-        append_buffer(remaining_data)
+        io_buffer_append(remaining_data)
         @pos += bytes_remaining
         break
       else
@@ -360,7 +360,7 @@ module FakeIO
            else              byte.to_s
            end
 
-    prepend_buffer(char)
+    io_buffer_prepend(char)
     @pos -= char.bytesize
     return nil
   end
@@ -378,7 +378,7 @@ module FakeIO
   def ungetc(char)
     char = char.to_s
 
-    prepend_buffer(char)
+    io_buffer_prepend(char)
     @pos -= char.bytesize
     return nil
   end
@@ -799,7 +799,7 @@ module FakeIO
   #
   def seek(new_pos,whence=SEEK_SET)
     io_seek(new_pos,whence)
-    clear_buffer!
+    io_buffer_clear!
     return 0
   end
 
@@ -1072,7 +1072,7 @@ module FakeIO
     @lineno = 0
     @eof    = false
 
-    clear_buffer!
+    io_buffer_clear!
 
     @fd = io_open
     @closed = false
@@ -1154,8 +1154,8 @@ module FakeIO
   #
   # Clears the read buffer.
   #
-  def clear_buffer!
-    @buffer = nil
+  def io_buffer_clear!
+    @io_buffer = nil
   end
 
   #
@@ -1164,8 +1164,8 @@ module FakeIO
   # @return [Boolean]
   #   Specifies whether the read buffer is empty.
   #
-  def empty_buffer?
-    @buffer.nil?
+  def io_buffer_empty?
+    @io_buffer.nil?
   end
 
   #
@@ -1174,9 +1174,9 @@ module FakeIO
   # @return [String]
   #   Data read from the buffer.
   #
-  def read_buffer
-    chunk = @buffer
-    clear_buffer!
+  def io_buffer_read
+    chunk = @io_buffer
+    io_buffer_clear!
     return chunk
   end
 
@@ -1186,13 +1186,13 @@ module FakeIO
   # @param [String] data
   #   The data to prepend.
   #
-  def prepend_buffer(data)
-    @buffer ||= if internal_encoding
+  def io_buffer_prepend(data)
+    @io_buffer ||= if internal_encoding
                   String.new(encoding: internal_encoding)
                 else
                   String.new
                 end
-    @buffer.insert(0,data.force_encoding(@buffer.encoding))
+    @io_buffer.insert(0,data.force_encoding(@io_buffer.encoding))
   end
 
   #
@@ -1201,13 +1201,13 @@ module FakeIO
   # @param [String] data
   #   The data to append.
   #
-  def append_buffer(data)
-    @buffer ||= if internal_encoding
+  def io_buffer_append(data)
+    @io_buffer ||= if internal_encoding
                   String.new(encoding: internal_encoding)
                 else
                   String.new
                 end
-    @buffer << data.force_encoding(@buffer.encoding)
+    @io_buffer << data.force_encoding(@io_buffer.encoding)
   end
 
 end
