@@ -794,6 +794,16 @@ describe FakeIO do
         expect(subject.each_chunk.first.encoding).to eq(subject.external_encoding)
       end
     end
+
+    context "when #io_read raises an EOFError" do
+      it "must set #eof to true" do
+        allow(subject).to receive(:io_read).and_raise(EOFError)
+
+        subject.each_chunk { |chunk| }
+
+        expect(subject.eof).to be(true)
+      end
+    end
   end
 
   describe "#read" do

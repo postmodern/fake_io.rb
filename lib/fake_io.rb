@@ -235,6 +235,7 @@ module FakeIO
           sleep(1)
         end
       rescue EOFError
+        @eof = true
         break
       end
 
