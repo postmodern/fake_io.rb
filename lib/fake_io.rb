@@ -17,11 +17,15 @@ module FakeIO
   include File::Constants
 
   # The position within the IO stream
+  #
+  # @return [Integer]
   attr_reader :pos
 
   alias tell pos
 
   # The end-of-file indicator
+  #
+  # @return [Boolean]
   attr_reader :eof
 
   alias eof? eof
