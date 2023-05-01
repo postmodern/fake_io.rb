@@ -1192,10 +1192,10 @@ module FakeIO
   #
   def io_buffer_prepend(data)
     @io_buffer ||= if internal_encoding
-                  String.new(encoding: internal_encoding)
-                else
-                  String.new
-                end
+                     String.new(encoding: internal_encoding)
+                   else
+                     String.new
+                   end
     @io_buffer.insert(0,data.force_encoding(@io_buffer.encoding))
   end
 
@@ -1207,10 +1207,10 @@ module FakeIO
   #
   def io_buffer_append(data)
     @io_buffer ||= if internal_encoding
-                  String.new(encoding: internal_encoding)
-                else
-                  String.new
-                end
+                     String.new(encoding: internal_encoding)
+                   else
+                     String.new
+                   end
     @io_buffer << data.force_encoding(@io_buffer.encoding)
   end
 
