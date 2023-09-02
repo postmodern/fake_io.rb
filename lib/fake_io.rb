@@ -499,7 +499,7 @@ module FakeIO
 
   if RUBY_VERSION < '3.'
     #
-    # Deprecated alias to {#each_bytes}.
+    # Deprecated alias to {#each_byte}.
     #
     # @deprecated Removed in Ruby 3.0.
     #
@@ -678,7 +678,7 @@ module FakeIO
   #
   # Writes data to the given offset, without changing the current {#pos}.
   #
-  # @param [String] data
+  # @param [String] string
   #   The data to write.
   #
   # @param [Integer] offset
