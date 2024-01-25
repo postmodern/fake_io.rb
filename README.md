@@ -86,8 +86,6 @@ file.readlines
 
 ## Copyright
 
-Copyright (c) 2021 Hal Brodigan
-
 See {file:LICENSE.txt} for details.
 
 [IO]: https://rubydoc.info/stdlib/core/IO
