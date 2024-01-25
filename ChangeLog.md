@@ -1,3 +1,7 @@
+### 0.1.1 / 2024-01-25
+
+* Added `# frozen_string_literal: true` to all files.
+
 ### 0.1.0 / 2022-02-01
 
 * Initial release:
