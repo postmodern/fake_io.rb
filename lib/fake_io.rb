@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # The {FakeIO} module provides an API for communicating with controlled
 # resources, that is still compatible with the standard
