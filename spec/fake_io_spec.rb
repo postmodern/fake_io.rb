@@ -702,7 +702,7 @@ describe FakeIO do
     context "when the first byte is 0xFF" do
       context "and the second byte is 0xFE" do
         let(:data) do
-          "\xFF\xFEhello".force_encoding(Encoding::ASCII_8BIT)
+          "\xFF\xFEh\x00e\x00l\x00l\x00o\x00".force_encoding(Encoding::ASCII_8BIT)
         end
 
         let(:encoding) { Encoding::UTF_16LE }
