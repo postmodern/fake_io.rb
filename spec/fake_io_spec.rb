@@ -280,7 +280,7 @@ describe FakeIO do
         context "and the thrid byte is 0xFE" do
           context "and the fourth byte is 0xFF" do
             let(:data) do
-              "\x00\x00\xFE\xFFhello".force_encoding(Encoding::ASCII_8BIT)
+              "\x00\x00\xFE\xFF\x00\x00\x00h\x00\x00\x00e\x00\x00\x00l\x00\x00\x00l\x00\x00\x00o".force_encoding(Encoding::ASCII_8BIT)
             end
 
             let(:encoding) { Encoding::UTF_32BE }
@@ -624,7 +624,7 @@ describe FakeIO do
     context "when the first byte is 0xFE" do
       context "and the second byte is 0xFF" do
         let(:data) do
-          "\xFE\xFFhello".force_encoding(Encoding::ASCII_8BIT)
+          "\xFE\xFF\x00h\x00e\x00l\x00l\x00o".force_encoding(Encoding::ASCII_8BIT)
         end
 
         let(:encoding) { Encoding::UTF_16BE }
